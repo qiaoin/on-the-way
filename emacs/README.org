@@ -1,0 +1,53 @@
+#+TITLE: Emacs 学习使用
+#+AUTHOR: qiaoin
+#+EMAIL: qiao.liubing@gmail.com
+#+OPTIONS: toc:3 num:nil
+#+STARTUP: showall
+
+- Emacs: "The Editor of a Lifetime"
+  + [[https://github.com/emacs-china/Spacemacs-rocks][Spacemacs Rocks 第二季]] Master Emacs in 21 Days
+    1. *DONE* 第一天：准备开始 <2016-12-01 16:48:16>
+    2. *DONE* 第二天：高级自定义 <2017-01-16 Mon 13:41:20>
+    3. *DONE* 第三天：配置文件模块化（上）
+    4. *DONE* 第四天：配置文件模块化（下）<2017-01-16 Mon 22:00:00>
+    5. *DONE* 第五天：打造前端开发神器 <2017-01-18 Wed 13:32:12> \\
+       这一天的内容可能于我自己被没有什么用处，我根本就没怎么写过 Web 相关，好吧，那就在这里挖个坑吧， *TODO* 学习 HTML/CSS/JavaScript 来建站
+    6. *DONE* 第六天：代码片段与语法检查器 <2017-01-18 Wed 17:00:00>
+    7. *DONE* 第七天：Evil 模式 <2017-01-18 Wed 20:09:24> \\
+       这一天的视频内容基本跳过去了，因为感觉自己不会重回使用 VIM 的模式
+    8. *DONE* 第八天：Cask 介绍与实践 <2017-01-18 Wed 22:09:24> \\
+       这一天的笔记我没有整理，也是觉得自己还没有使用这个进行管理的需要
+    9. *DONE* 第九天：Macro 与 Use-package <2017-01-22 Sun 23:10:16>
+    10. *DONE* 第十天：Company-mode 与 auto-completion <2017-01-26 Thu 16:22:36>
+    11. *TODO* Day11 & Day12 & Day13 & Day14 & Day15 <2017-02-07 Tue 22:17:56> \\
+        这几天的视频都已经看完，只是笔记还没有整理，要认真整理 
+        - Day11: 开始使用 Spacemacs
+        - Day12: 自定义 Layer
+        - Day13: Layer 的更多自定义
+        - Day14: 常用的 Spacemacs 操作：file 和 buffer 操作 *TODO*
+        - Day15: 常用的 Spacemacs 操作：window， project 和 layout 操作 *TODO*
+        - Day16: Ctags 和 company mode 配置自动补全 *TODO*
+        - Day17: Lispy 的使用 *TODO*
+        - Day18: How to *survive* in Spacemac
+        - Day19: Elisp Hacking Tips *TODO*
+        - Day20: zilongshanren 的 Spacemacs 配置介绍 *TODO*
+        - Day21: How to master Emacs in one year? *TODO*
+
+  + [[http://orgmode.org/][Org mode]]
+    #+BEGIN_QUOTE
+    Org mode is for keeping notes, maintaining TODO lists, planning projects, and authoring documents with a fast and effective plain-text system.
+    #+END_QUOTE
+    + *TODO* [[http://sachachua.com/blog/2014/01/tips-learning-org-mode-emacs/][Some tips for learning Org Mode for Emacs]]
+    + *DONE* [[http://members.optusnet.com.au/~charles57/GTD/][Emacs, org-mode and Getting Things Done (GTD) articles by Charles Cave]]
+      - *maybe* translate some articles in this site
+      - especially, [[http://members.optusnet.com.au/~charles57/GTD/orgmode.html][Using Emacs org-mode for GTD]] and [[http://members.optusnet.com.au/~charles57/GTD/gtd_workflow.html][How I use Emacs and Org-mode to implement GTD]]
+      - *ALREADY DONE* 看完了以上两篇博文，感觉有点收获但有说不上来，现在仅仅是依照着 Spacemacs-Rocks 第二季视频中的介绍进行了些许配置，可以参看 =~/.spacemacs.d/lisp/init-org.el= ，需进行 GTD 管理之后才能觉出好坏。
+
+  + Magit 学习使用
+    + *DONE* 知道简单的 Magit 工作流
+    + *TODO* 写一篇关于 Magit 使用的最佳实践
+
+  + [[https://www.gnu.org/software/emacs/manual/html_mono/eintr.html][Emacs Lisp]] 
+    + 简单了解，M-x info -> Emacs Lisp Intro
+    + 通过阅读 [[https://github.com/jwiegley/use-package][use-package]] 源码来进行 elisp 的学习
+

@@ -1,0 +1,14 @@
+#+TITLE: 在看完PartA & B & C 之后，再来看这里，会是什么样的感受？
+#+AUTHOR: qiaoin
+#+EMAIL: qiao.liubing@gmail.com
+#+OPTIONS: toc:3 num:nil
+#+STARTUP: showall
+
+最初看到这堂课是在知乎上的“Coursera 上有哪些课程值得推荐？”下面的[[回答][https://www.zhihu.com/question/22436320/answer/32665792]]，
+称“这门绝对是第一神课啊！”，又看下面的描述说是会讲到很多编程语言的本质思想，遂决心找来看看。适逢，Coursera 新版上线，课程新开，真是心情大快，
+花了将近一个月的时间将 =PartA= 看完，也有很多感受。
+
+- [[https://www.coursera.org/learn/programming-languages][Part A]]
+  + *TODO* 写一个关于 =StandardML= 的总结，当然要结合 =PartA= 所讲解的内容，并且还有习题的说明
+- [[https://www.coursera.org/learn/programming-languages-part-b][Part B]] *TODO*
+- [[https://www.coursera.org/learn/programming-languages-part-c][Part C]] *TODO*

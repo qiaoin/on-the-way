@@ -1,0 +1,36 @@
+#+TITLE: Learning how to learn, I walk on my way.
+#+AUTHOR: qiaoin
+#+EMAIL: qiao.liubing@gmail.com
+#+OPTIONS: toc:3 num:nil
+#+STARTUP: showall
+
+
+#+BEGIN_QUOTE
+I come, I read, I practice, and I understanding.
+#+END_QUOTE
+
+
+** *On-Line-Course*
+
+- [[./programming-languages][Programming Language]] 
+- Machine Learning (by Andrew Ng)
+- [[https://zhuanlan.zhihu.com/json-tutorial][从零开始的 JSON 库教程]] 
+
+
+** *Reading*
+
+#+BEGIN_QUOTE
+[[./how-to-find-a-book-to-read.md][如何找到一本好书来看？]] 
+#+END_QUOTE
+
+- [[./the-practive-of-programming][The Practice of Programming]] (程序设计实践)
+- [[./sicp][Structure and Interpretation of Computer Programs]] (SICP, 计算机程序的构造与解释)
+- [[./programming-pearls][Programming Pearls]] 编程珠玑
+- [[./unix-network-programming-vol1][Unix Network Programming, Volume 1: The Sockets Networking API]] (Unix 网络编程 卷1: 套接字联网 API)
+- Future of Code (代码的未来)
+
+
+** *Hacking!*
+
+- [[./emacs][Emacs]]
+- [[./vim][Vim]]

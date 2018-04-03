@@ -1,0 +1,9 @@
+#+TITLE: 编程珠玑
+#+AUTHOR: qiaoin
+#+EMAIL: qiao.liubing@gmail.com
+#+OPTIONS: toc:3 num:nil
+#+STARTUP: showall
+
+- 开篇
+- 啊哈！算法
+- etc...

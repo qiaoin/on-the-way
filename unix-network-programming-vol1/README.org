@@ -1,0 +1,9 @@
+#+TITLE: UNIX网络编程 卷1：套接字联网API
+#+AUTHOR: qiaoin
+#+EMAIL: qiao.liubing@gmail.com
+#+OPTIONS: toc:3 num:nil
+#+STARTUP: showall
+
+- 阻塞式IO；
+- 非阻塞式IO；
+- etc...

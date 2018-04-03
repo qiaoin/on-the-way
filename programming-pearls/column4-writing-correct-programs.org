@@ -1,0 +1,30 @@
+#+TITLE: Writing Binary Search Correctly
+#+AUTHOR: qiaoin
+#+EMAIL: qiao.liubing@gmail.com
+#+DATE: <2016-11-26 21:32:12 Sat>
+
+在看4.2节前，就试着如书上所说——“putting down this column right now and writing the code yourself. Try it!”
+
+* Implementing Binary Search with C
+
+#+BEGIN_SRC c
+    /*
+    * 数组a按升序排列，即: a[0] <= a[1] <= ... <= a[n-1]
+    */
+    int binarySearch(int a[], int left, int right, int target) {
+    int mid = 0;
+    while (left <= right) {
+      mid = (left + right) / 2;
+      if (target == a[mid]) {
+        return mid;
+      } else if (target < a[mid]) {
+        right = mid - 1;
+      } else {
+        left = mid + 1;
+      }
+    }
+    return -1;
+  }
+#+END_SRC
+
+这里仅仅是能够处理 =int= 数组的情况，离编程珠玑的要求 “the pseudocode should work equally well for integers, floats or strings” 还有很远，只是能够将自己的思路表达出来即可。其实，找着看这一节，也是在之前的 [[http://zh.lucida.me/blog/on-learning-algorithms/#The-Science-of-Programming][博客]] 上看到的，怎么评价能够这么高，都已经到达了程序正确性证明的地步了，遂决定有必要翻翻，提升技能。

@@ -1,0 +1,15 @@
+#+TITLE: 在看完PartA & B & C 之后，再来看这里，会是什么样的感受？
+#+AUTHOR: qiaoin
+#+EMAIL: qiao.liubing@gmail.com
+#+OPTIONS: toc:3 num:nil
+#+STARTUP: showall
+
+《计算机程序的构造与解释》这本书，我是在读大一的时候就买来的，可惜了，大学没看，一直到最后本科毕业论文答辩之后才开始看。
+陆陆续续看了有一个多月，才看到第二章的第一小节，后来就找到了华盛顿大学的 =Programming Language= 来学习，确实感觉不怎么吃力，
+毕竟在啃 =SICP= 第一章时还是花了很大的功夫的，也将第一章的习题做了一遍，对我来说也是有很大的收获，在这次的十一长假中，
+将华盛顿大学的 =Programming Language= 的 =PartA= 的作业整理了以下，觉得也应该将 =SICP= 的作业也进行一番整理，
+能够对自己之前的所学有一个系统的认识，也是一个很好的回顾。遂记下。
+
+第一章中的重要话题：
+- Fixed Point (不动点)
+- Church Number (邱奇数)
