@@ -1,0 +1,10 @@
+#+TITLE: 使用 Orgmode 进行写作 指北
+#+AUTHOR: qiaoin
+#+EMAIL: qiao.liubing@gmail.com
+#+OPTIONS: toc:3 num:nil
+#+STARTUP: showall
+
+#+BEGIN_QUOTE
+- 每个 =org= 文件开头的这些东西是什么含义
+- etc...
+#+END_QUOTE

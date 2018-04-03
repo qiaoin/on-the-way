@@ -1,0 +1,32 @@
+#+TITLE: How to find a book to read & track & continue
+#+AUTHOR: qiaoin
+#+EMAIL: qiao.liubing@gmail.com
+#+OPTIONS: toc:3 num:nil
+#+STARTUP: showall
+
+#+BEGIN_QUOTE
+- 为什么要整理这样的一个读书笔记？
+- 整理自己是如何找到自己专业的书籍来看的？
+- 如何记录自己看书的心得体会？
+- 如何利用 =Github= 进行跟踪自己的看书情况？
+#+END_QUOTE
+
+之前在读本科的时候，我找书看都是上豆瓣，查看“编程”类标签
+
+[[./images/douban-tag-programming.png]豆瓣编程类书籍排名]]
+
+冲着这个名气（其实就是附庸风雅，觉得买几本这个书放在书架上也很是不错），也就买了好几本这个页面上的书，
+[[https://book.douban.com/subject/1148282/][计算机程序的构造和解释]]、
+[[https://book.douban.com/subject/1230413/][深入理解计算机系统]]、
+[[https://book.douban.com/subject/1885170/][算法导论]]、
+[[https://book.douban.com/subject/1139336/][C程序设计语言]]、
+[[https://book.douban.com/subject/19952400/][算法]]。
+说出来也不怕笑话，上面的书大都是在本科二年级时候就已经买了，闲置在书架上柜子上已经蒙了几层灰了，但就是没怎么想起来看，
+=SCIP= 也是在本科毕业之后才开始看的，一个月断断续续看到了第二章，其他的就更不用说了，都没怎么系统的看完，这个翻一翻，那个摘一段看看。
+遂觉得自己耽误了好多时间，突又想起来，“种一棵树的时间，是10年前，或者就是现在。”也就能勉做安慰了（怎么感觉就是自己在给自己找各种各样的借口呢？）。
+
+在一个星期以前，在网上看到一篇文章[[https://zhuanlan.zhihu.com/p/20442311][如何用Github去管理你的Idea]]。
+自己更进一步，使用 =Github= 来对自己的读书学习进度与深度进行管理；如何使用 =Issues= 
+来管理近期的打算，以及想要去做（看书，或者网上 =MOOC= ）和正在做的事情，当然这是后话。
+
+此之为开始。  
