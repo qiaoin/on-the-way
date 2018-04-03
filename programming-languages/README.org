@@ -4,7 +4,7 @@
 #+OPTIONS: toc:3 num:nil
 #+STARTUP: showall
 
-最初看到这堂课是在知乎上的“Coursera 上有哪些课程值得推荐？”下面的[[回答][https://www.zhihu.com/question/22436320/answer/32665792]]，
+最初看到这堂课是在知乎上的“Coursera 上有哪些课程值得推荐？”[[https://www.zhihu.com/question/22436320/answer/32665792][字节的回答]]，
 称“这门绝对是第一神课啊！”，又看下面的描述说是会讲到很多编程语言的本质思想，遂决心找来看看。适逢，Coursera 新版上线，课程新开，真是心情大快，
 花了将近一个月的时间将 =PartA= 看完，也有很多感受。
 

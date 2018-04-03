@@ -1,4 +1,4 @@
-#+TITLE: 在看完PartA & B & C 之后，再来看这里，会是什么样的感受？
+#+TITLE: 计算机程序的构造与解释 - 抽象思维的锻炼
 #+AUTHOR: qiaoin
 #+EMAIL: qiao.liubing@gmail.com
 #+OPTIONS: toc:3 num:nil

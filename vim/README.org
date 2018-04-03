@@ -4,7 +4,6 @@
 #+OPTIONS: toc:3 num:nil
 #+STARTUP: showall
 
-计算机体系结构：量化研究方法，整理包含：
 
 - 无插件 VIM 使用；
 - etc...

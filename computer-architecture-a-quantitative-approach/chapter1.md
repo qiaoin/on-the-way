@@ -5,7 +5,7 @@
 
 > This text is about the architecture ideas and accompanying compiler improvements that made the incredible growth rate possible in the last century, the reasons for the dramatic change, and the challenges and initial promising approaches to architecture ideas, compilers, and interpreters for the 21st century. At the core is a quantitative approach to computer design and analysis that uses empirical observersions of programs, experimentation, and simulation as its tools.
 
-![growth_in_processor_performance](../images/growth_in_processor_performance.png)
+![growth_in_processor_performance](./images/growth_in_processor_performance.png)
 
 The figure above shows that the combination of architectural and organizational enhancements led to 17 years of sustained growth in performance at an annual rate of over 50% from 1986 to 2003. And the effect of this dramatic growth rate has been fourfold.
 
@@ -223,7 +223,7 @@ disscuss the major factors that influence the cost of a computer and how these f
 
 - The cost of dies:
 
-![cost_of_dies](../images/cost_of_dies.png)
+![cost_of_dies](./images/cost_of_dies.png)
 
 
 ## Dependability (without)
@@ -302,7 +302,7 @@ Introduce important observations about design, as well as two equations to evalu
 
   - for each individual instruction:
 
-  ![CPU time](../images/cpu_time.png)
+  ![CPU time](./images/cpu_time.png)
 
 ## Putting It All Together: Performance, Price, and Power
 

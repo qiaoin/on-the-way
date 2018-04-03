@@ -1,0 +1,9 @@
+#+TITLE: 机器学习 by 吴恩达
+#+AUTHOR: qiaoin
+#+EMAIL: qiao.liubing@gmail.com
+#+OPTIONS: toc:3 num:nil
+#+STARTUP: showall
+
+- 知道基本机器学习方法的优劣，能够做出选择
+- 熟悉算法的基本思想
+- etc...
