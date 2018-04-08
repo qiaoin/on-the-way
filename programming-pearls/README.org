@@ -32,15 +32,11 @@
 Part I: PRELIMINARIES 准备工作
 - [[./column1-cracking-the-oyster.org][开篇]] 
 
-  This column is the history of a single problem. A combination of careful problem definition
-and straightforward programming techniques led to an elegant solution. The column illustrates
-the central theme of this book: thinking hard about a real case study can be fun and can also
-lead to practical benefits.
+  This column is the history of a single problem. A combination of careful problem definition and straightforward programming techniques led to an elegant solution. The column illustrates the central theme of this book: thinking hard about a real case study can be fun and can also lead to practical benefits.
 
 - 啊哈！算法 
 
-  This column examines three problems, with an emphasis on how algorithmic insights can yield
-simple and effective code.
+  This column examines three problems, with an emphasis on how algorithmic insights can yield simple and effective code.
 
 - 数据决定程序结构
 
@@ -48,13 +44,11 @@ simple and effective code.
 
 - 编写正确的程序
   
-  This column introduces *program verification* as a tool for writing correct code. Verification
-techniques are used extensively as we derive subtle (and fast) functions in Columns 9, 11 and 14.
+  This column introduces *program verification* as a tool for writing correct code. Verification techniques are used extensively as we derive subtle (and fast) functions in Columns 9, 11 and 14.
 
 - 编程中的次要问题
   
-  This column shows how we implement those abstract programs in real code: we use scaffolding to
-probe a function, to bombard it with test cases, and to measure its performance.
+  This column shows how we implement those abstract programs in real code: we use scaffolding to probe a function, to bombard it with test cases, and to measure its performance.
 
 Part II: PERFORMANCE
 - 程序性能分析
