@@ -25,7 +25,7 @@ I come, I read, I practice, and I understanding.
 
 - [[./the-practive-of-programming][The Practice of Programming]] (程序设计实践)
 - [[./sicp][Structure and Interpretation of Computer Programs]] (SICP, 计算机程序的构造与解释)
-- [[./programming-pearls][Programming Pearls]] 编程珠玑
+- [[./programming-pearls][Programming Pearls]] (编程珠玑)
 - [[./unix-network-programming-vol1][Unix Network Programming, Volume 1: The Sockets Networking API]] (Unix 网络编程 卷1: 套接字联网 API)
 - Future of Code (代码的未来)
 
@@ -34,3 +34,4 @@ I come, I read, I practice, and I understanding.
 
 - [[./emacs][Emacs]]
 - [[./vim][Vim]]
+
