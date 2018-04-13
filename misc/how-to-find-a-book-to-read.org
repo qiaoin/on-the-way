@@ -13,7 +13,7 @@
 
 之前在读本科的时候，我找书看都是上豆瓣，查看“编程”类标签
 
-[[./images/douban-tag-programming.png]豆瓣编程类书籍排名]]
+[[../images/douban-tag-programming.png][豆瓣编程类书籍排名]]
 
 冲着这个名气（其实就是附庸风雅，觉得买几本这个书放在书架上也很是不错），也就买了好几本这个页面上的书，
 [[https://book.douban.com/subject/1148282/][计算机程序的构造和解释]]、
