@@ -1,4 +1,4 @@
-#+TITLE: Learning and Having Fun in Ten Years
+#+TITLE: Learning Programming in Ten Years
 #+AUTHOR: qiaoin
 #+EMAIL: qiao.liubing@gmail.com
 #+OPTIONS: toc:3 num:nil
@@ -38,7 +38,7 @@
 
 **** *# Python* 
 
-***** *实践项目*
+***** *## 实践项目*
 
       - 处理文本文件，或者csv (关键词 python csv, python open, python sys) 读一个本地文件，逐行处理（例如 word count，或者处理log）;
       - 遍历本地文件系统 (sys, os, path)，例如写一个程序统计一个目录下所有文件大小并按各种条件排序并保存结果；
