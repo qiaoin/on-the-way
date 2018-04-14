@@ -13,279 +13,204 @@
 3. 这些所有的列出来可能就有点多了，精读（大部分书需要精读）需要几年的时间，需要记录，自己每段时间都在干什么，以及成果是什么
 #+END_QUOTE
 
-*** 计算机科学与技术 
+** 计算机科学与技术 
 
-    *主要参考的博客*
+   *主要参考的博客*
 
-    - [[http://www.williamlong.info/archives/2700.html][写给新手程序员的一封信]] 
-    - [[https://coolshell.cn/articles/4990.html][程序员技术练级攻略]] 
-
-
-    *关于态度*
-
-    #+BEGIN_QUOTE
-    有从上述博客中摘录的部分，也有自己的总结，是为对自己的期望。
-    #+END_QUOTE
-
-    - 一定要动手，例子不管多么简单，都至少自己手敲一遍看看是否理解了里头的细枝末节；
-    - 一定要学会思考，思考为什么要这样，而不是那样。还要举一反三地思考；
-    - 每天至少要有 *一个小时* 在 *完完全全* 在 *敲代码* ；
-    - 以下内容还有很多需要补充的，例如，关系型数据库，设计模式，web基础（HTML/CSS/JavaScript），服务器端技术（LAMP），web安全与架构，其他编程语言如GO等，等待之后慢慢添加和更新；
-    - ...
+   - [[http://www.williamlong.info/archives/2700.html][写给新手程序员的一封信]] 
+   - [[https://coolshell.cn/articles/4990.html][程序员技术练级攻略]] 
 
 
-**** *语言学习*
+   *关于态度*
 
-***** *# Python* 
+   #+BEGIN_QUOTE
+   有从上述博客中摘录的部分，也有自己的总结，是为对自己的期望。
+   #+END_QUOTE
 
-****** 实践项目
-
-       - 处理文本文件，或者csv (关键词 python csv, python open, python sys) 读一个本地文件，逐行处理（例如 word count，或者处理log）;
-       - 遍历本地文件系统 (sys, os, path)，例如写一个程序统计一个目录下所有文件大小并按各种条件排序并保存结果；
-       - 跟数据库打交道 (python sqlite)，写一个小脚本统计数据库里条目数量；
-       - 学会用各种print之类简单粗暴的方式进行调试；
-       - ...
-
-
-***** *# C和操作系统调用* 
-
-      参考博客 [[https://coolshell.cn/articles/4102.html][如何学好C语言]] 和 [[https://coolshell.cn/articles/4990.html][程序员技术练级攻略]] 
-
-      - 学习 [[http://open.163.com/special/opencourse/bianchengdaolun.html][麻省理工学院公开课：计算机科学及编程导论]] 建议看英文的，python 相关，这样可以提高自己的英文能力
-      - 学习 [[https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-088-introduction-to-c-memory-management-and-c-object-oriented-programming-january-iap-2010/index.htm][（麻省理工免费课程）C语言内存管理和C++面向对象编程]]
-        + C语言中的两大主题，一个是内存管理，一个是指针 [[https://book.douban.com/subject/1139336/][C程序设计语言（第2版·新版）]] 
-      - 重新学C语言，理解指针和内存模型，用C语言实现一下各种经典的算法和数据结构。
-        + 主要集中 [[https://book.douban.com/subject/4065258/][算法:C语言实现(第1～4部分)基础知识、数据结构、排序及搜索(原书第3版)]] 
-        + 推荐 [[https://book.douban.com/subject/1130500/][计算机程序设计艺术]] 、 [[https://book.douban.com/subject/20432061/][算法导论]] 和 [[https://book.douban.com/subject/3227098/][编程珠玑]] ；
-      - 学习 Unix/Linux 系统调用 [[https://book.douban.com/subject/25900403/][Unix 高级环境编程]] 了解系统层面的东西
-        + 用这些系统知识操作一下文件系统，用户（实现一个可以拷贝目录树的小程序）
-        + 用fork/wait/waitpid写一个多进程的程序，用pthread写一个多线程带同步或互斥的程序。多进程多进程购票的程序
-        + 用signal/kill/raise/alarm/pause/sigprocmask实现一个多进程间的信号量通信的程序
-        + 学会使用gcc和gdb来编程和调试程序 [[http://wiki.ubuntu.org.cn/index.php?title=%E7%94%A8GDB%E8%B0%83%E8%AF%95%E7%A8%8B%E5%BA%8F&variant=zh-hans][用GDB调试程序]] 
-        + 学会使用makefile来编译程序 [[https://github.com/seisman/how-to-write-makefile][跟我一起写Makefile]] 
+   - 一定要动手，例子不管多么简单，都至少自己手敲一遍看看是否理解了里头的细枝末节；
+   - 一定要学会思考，思考为什么要这样，而不是那样。还要举一反三地思考；
+   - 每天至少要有 *一个小时* 在 *完完全全* 在 *敲代码* ；
+   - 以下内容还有很多需要补充的，例如，关系型数据库，设计模式，web基础（HTML/CSS/JavaScript），服务器端技术（LAMP），web安全与架构，其他编程语言如GO等，等待之后慢慢添加和更新；
+   - ...
 
 
-***** *# C++* 
+*** *语言学习*
+
+**** *# Python* 
+
+***** *实践项目*
+
+      - 处理文本文件，或者csv (关键词 python csv, python open, python sys) 读一个本地文件，逐行处理（例如 word count，或者处理log）;
+      - 遍历本地文件系统 (sys, os, path)，例如写一个程序统计一个目录下所有文件大小并按各种条件排序并保存结果；
+      - 跟数据库打交道 (python sqlite)，写一个小脚本统计数据库里条目数量；
+      - 学会用各种print之类简单粗暴的方式进行调试；
+      - ...
+
+
+**** *# C和操作系统调用* 
+
+     参考博客 [[https://coolshell.cn/articles/4102.html][如何学好C语言]] 和 [[https://coolshell.cn/articles/4990.html][程序员技术练级攻略]] 
+
+     - 学习 [[http://open.163.com/special/opencourse/bianchengdaolun.html][麻省理工学院公开课：计算机科学及编程导论]] 建议看英文的，python 相关，这样可以提高自己的英文能力
+     - 学习 [[https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-088-introduction-to-c-memory-management-and-c-object-oriented-programming-january-iap-2010/index.htm][（麻省理工免费课程）C语言内存管理和C++面向对象编程]]
+       + C语言中的两大主题，一个是内存管理，一个是指针 [[https://book.douban.com/subject/1139336/][C程序设计语言（第2版·新版）]] 
+     - 重新学C语言，理解指针和内存模型，用C语言实现一下各种经典的算法和数据结构。
+       + 主要集中 [[https://book.douban.com/subject/4065258/][算法:C语言实现(第1～4部分)基础知识、数据结构、排序及搜索(原书第3版)]] 
+       + 推荐 [[https://book.douban.com/subject/1130500/][计算机程序设计艺术]] 、 [[https://book.douban.com/subject/20432061/][算法导论]] 和 [[https://book.douban.com/subject/3227098/][编程珠玑]] ；
+     - 学习 Unix/Linux 系统调用 [[https://book.douban.com/subject/25900403/][Unix 高级环境编程]] 了解系统层面的东西
+       + 用这些系统知识操作一下文件系统，用户（实现一个可以拷贝目录树的小程序）
+       + 用fork/wait/waitpid写一个多进程的程序，用pthread写一个多线程带同步或互斥的程序。多进程多进程购票的程序
+       + 用signal/kill/raise/alarm/pause/sigprocmask实现一个多进程间的信号量通信的程序
+       + 学会使用gcc和gdb来编程和调试程序 [[http://wiki.ubuntu.org.cn/index.php?title=%E7%94%A8GDB%E8%B0%83%E8%AF%95%E7%A8%8B%E5%BA%8F&variant=zh-hans][用GDB调试程序]] 
+       + 学会使用makefile来编译程序 [[https://github.com/seisman/how-to-write-makefile][跟我一起写Makefile]] 
+
+
+**** *# C++* 
     
-      “C++是最需要学好的语言”（CoolShell博主陈皓语），参考博客 [[https://coolshell.cn/articles/4119.html][如何学好C++语言]] 和 [[https://coolshell.cn/articles/4990.html][程序员技术练级攻略]] 
+     “C++是最需要学好的语言”（CoolShell博主陈皓语），参考博客 [[https://coolshell.cn/articles/4119.html][如何学好C++语言]] 和 [[https://coolshell.cn/articles/4990.html][程序员技术练级攻略]] 
 
-      - 学习 [[https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-088-introduction-to-c-memory-management-and-c-object-oriented-programming-january-iap-2010/index.htm][（麻省理工免费课程）C语言内存管理和C++面向对象编程]]
-      - [[https://book.douban.com/subject/25708312/][C++ Primer]] 这本初级读本可能让会你啃得很痛苦，所有的语言的特性和为什么都在里面了，好好读读
-      - *TODO* 先把上两项弄的差不多了，在根据参考博客添加其他的 2018年4月14日添加
-
-
-**** *tools*
-
-***** *# 编辑器*
-
-      使用这些东西不是为了Cool，而是这些编辑器在查看、修改代码/配置文章/日志会更快更有效率。
-
-      - *Vim / Emacs* ，两者都要学习使用，学会如何配置代码补全，外观，内部命令等
-       + [[https://coolshell.cn/articles/5426.html][简明 VIM 练级攻略]] 
-       + Emacs，日常写 Org 文档和代码使用 Emacs
-      - *Ctag*
+     - 学习 [[https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-088-introduction-to-c-memory-management-and-c-object-oriented-programming-january-iap-2010/index.htm][（麻省理工免费课程）C语言内存管理和C++面向对象编程]]
+     - [[https://book.douban.com/subject/25708312/][C++ Primer]] 这本初级读本可能让会你啃得很痛苦，所有的语言的特性和为什么都在里面了，好好读读
+     - *TODO* 先把上两项弄的差不多了，在根据参考博客添加其他的 2018年4月14日添加
 
 
-***** *# Unix/Linux Shell*
+*** *tools*
 
-      [[https://coolshell.cn/articles/8883.html][应该知道的LINUX技巧]] 
+**** *# 编辑器*
+
+     使用这些东西不是为了Cool，而是这些编辑器在查看、修改代码/配置文章/日志会更快更有效率。
+
+     - *Vim / Emacs* ，两者都要学习使用，学会如何配置代码补全，外观，内部命令等
+      + [[https://coolshell.cn/articles/5426.html][简明 VIM 练级攻略]] 
+      + Emacs，日常写 Org 文档和代码使用 Emacs
+     - *Ctag*
+
+
+**** *# Unix/Linux Shell*
+
+     [[https://coolshell.cn/articles/8883.html][应该知道的LINUX技巧]] 
     
-      - 常用的命令行
-        + 学会使用man来查看帮助
-        + 文件系统结构和基本操作 ls/chmod/chown/rm/find/ln/cat/mount/mkdir/tar/gzip...
-        + 学会使用一些文本操作命令 sed/awk/grep/tail/less/more...
-        + 学会使用一些管理命令 ps/top/lsof/netstat/kill/tcpdump/iptables/dd...
-        + 了解/etc目录下的各种配置文章，学会查看/var/log下的系统日志，以及/proc下的系统运行信息
-        + 了解正则表达式，使用正则表达式来查找文件
-        + ...
-      - [[https://deerchao.net/tutorials/regex/regex.htm][正则表达式30分钟入门教程]] 
-      - [[https://coolshell.cn/articles/9070.html][AWK 简明教程]] 
-      - [[https://coolshell.cn/articles/9104.html][SED 简明教程]] 
+     - 常用的命令行
+       + 学会使用man来查看帮助
+       + 文件系统结构和基本操作 ls/chmod/chown/rm/find/ln/cat/mount/mkdir/tar/gzip...
+       + 学会使用一些文本操作命令 sed/awk/grep/tail/less/more...
+       + 学会使用一些管理命令 ps/top/lsof/netstat/kill/tcpdump/iptables/dd...
+       + 了解/etc目录下的各种配置文章，学会查看/var/log下的系统日志，以及/proc下的系统运行信息
+       + 了解正则表达式，使用正则表达式来查找文件
+       + ...
+     - [[https://deerchao.net/tutorials/regex/regex.htm][正则表达式30分钟入门教程]] 
+     - [[https://coolshell.cn/articles/9070.html][AWK 简明教程]] 
+     - [[https://coolshell.cn/articles/9104.html][SED 简明教程]] 
 
 
-***** *# 一些开发工具*
+**** *# 一些开发工具*
 
-      - 学会使用Git来管理程序版本
-      - 学习C语言和C++语言的coding standard 或 coding guideline
-        + C [[https://blog.csdn.net/haoel/article/category/9200/2][编程修养]]
-        + C++ [[http://zh-google-styleguide.readthedocs.io/en/latest/google-cpp-styleguide/][Google C++ 风格指南]] 
-      - 推荐阅读 [[https://book.douban.com/subject/1477390/][代码大全]] [[https://book.douban.com/subject/4262627/][重构]] [[https://book.douban.com/subject/26919457/][代码整洁之道]] 
+     - 学会使用Git来管理程序版本
+     - 学习C语言和C++语言的coding standard 或 coding guideline
+       + C [[https://blog.csdn.net/haoel/article/category/9200/2][编程修养]]
+       + C++ [[http://zh-google-styleguide.readthedocs.io/en/latest/google-cpp-styleguide/][Google C++ 风格指南]] 
+     - 推荐阅读 [[https://book.douban.com/subject/1477390/][代码大全]] [[https://book.douban.com/subject/4262627/][重构]] [[https://book.douban.com/subject/26919457/][代码整洁之道]] 
 
 
-**** *专业课程* 
+*** *专业课程* 
 
-***** *# 算法与数据结构* 
+**** *# 算法与数据结构* 
 
-      - [[https://book.douban.com/subject/4065258/][算法:C语言实现(第1～4部分)基础知识、数据结构、排序及搜索(原书第3版)]]
-      - [[https://book.douban.com/subject/20432061/][算法导论]] 
-        + 英文版书
-        + [[https://www.youtube.com/playlist?list=PLUl4u3cNGP61Oq3tWYp6V_F-5jb5L2iHb][MIT 6.006 Fall 2011 YouTube 课程视频]] 
+     - [[https://book.douban.com/subject/4065258/][算法:C语言实现(第1～4部分)基础知识、数据结构、排序及搜索(原书第3版)]]
+     - [[https://book.douban.com/subject/20432061/][算法导论]] 
+       + 英文版书
+       + [[https://www.youtube.com/playlist?list=PLUl4u3cNGP61Oq3tWYp6V_F-5jb5L2iHb][MIT 6.006 Fall 2011 YouTube 课程视频]] 
 
-***** *# 操作系统* 
+**** *# 操作系统* 
 
-      - [[http://www.xuetangx.com/courses/course-v1:TsinghuaX+30240243X+sp/about][清华大学学堂在线 操作系统课程]] 
+     - [[http://www.xuetangx.com/courses/course-v1:TsinghuaX+30240243X+sp/about][清华大学学堂在线 操作系统课程]] 
 
-***** *# 计算机体系结构*
+**** *# 计算机体系结构*
 
-***** *# 计算机网络*
+**** *# 计算机网络*
 
-***** *# 数据库*
+**** *# 数据库*
 
-***** *# 编译原理*
+**** *# 编译原理*
 
-***** *# 分布式系统*
+**** *# 分布式系统*
 
-      - [[https://pdos.csail.mit.edu/6.824/schedule.html][MIT 6.824 Distributed System]] 
+     - [[https://pdos.csail.mit.edu/6.824/schedule.html][MIT 6.824 Distributed System]] 
 
-***** *# 可供参考的网络资源*
+**** *# 可供参考的网络资源*
 
-      - 需要更加好的参考，可以访问 [[https://teachyourselfcs.com/][Teach Yourself Computer Science]] 
-      - 当然还有更多的课程和资料，在自己有余力看过之后就添加上来，待更新
+     - 需要更加好的参考，可以访问 [[https://teachyourselfcs.com/][Teach Yourself Computer Science]] 
+     - 当然还有更多的课程和资料，在自己有余力看过之后就添加上来，待更新
 
-**** *个人设置的小目标* 
+*** *个人设置的小目标* 
 
-    #+BEGIN_QUOTE
-    这个里面列出的目标，完成之后都有对应的奖励，有些还没有想好
-    #+END_QUOTE
+   #+BEGIN_QUOTE
+   这个里面列出的目标，完成之后都有对应的奖励，有些还没有想好
+   #+END_QUOTE
 
-***** *# Introduction to Algorithm* 
+**** *# Introduction to Algorithm* 
 
-      使用 MarginNote 看英文电子版，奖励：配一副好点的眼镜
+     使用 MarginNote 看英文电子版，奖励：配一副好点的眼镜
 
-***** [[https://pdos.csail.mit.edu/6.824/schedule.html][# MIT 6.824 Distributed System]] 
+**** [[https://pdos.csail.mit.edu/6.824/schedule.html][# MIT 6.824 Distributed System]] 
 
-***** *# 编程珠玑 英文版* 2018年4月4日添加
+**** *# 编程珠玑 英文版* 2018年4月4日添加
 
-      - Column1 Cracking the oyster 4月9日开始  
+     - Column1 Cracking the oyster 4月9日开始  
 
-***** *# 加强系统了解* 
+**** *# 加强系统了解* 
 
-****** [[https://book.douban.com/subject/5387401/][Unix编程艺术]] 
+***** [[https://book.douban.com/subject/5387401/][## Unix编程艺术]] 
      
-       了解Unix系统领域中的设计和开发哲学、思想文化体系、原则与经验。一定会有一种醍醐灌顶的感觉
+      了解Unix系统领域中的设计和开发哲学、思想文化体系、原则与经验。一定会有一种醍醐灌顶的感觉
 
-****** [[https://book.douban.com/subject/26434583/][UNIX网络编程 卷1：套接字联网API（第3版）]] 
+***** [[https://book.douban.com/subject/26434583/][## UNIX网络编程 卷1：套接字联网API（第3版）]] 
 
-       这是一本看完你就明白网络编程的书。重要注意TCP、UDP，以及多路复用的系统调用select/poll/epoll的差别
+      这是一本看完你就明白网络编程的书。重要注意TCP、UDP，以及多路复用的系统调用select/poll/epoll的差别
 
-****** [[https://book.douban.com/subject/1088054/][TCP/IP详解 卷1：协议]] 
+***** [[https://book.douban.com/subject/1088054/][## TCP/IP详解 卷1：协议]] 
 
-       这是一本看完后你就可以当网络黑客的书。了解以太网的的运作原理，了解TCP/IP的协议，运作原理以及如何TCP的调优
+      这是一本看完后你就可以当网络黑客的书。了解以太网的的运作原理，了解TCP/IP的协议，运作原理以及如何TCP的调优
 
-****** 实践任务
+***** *## 实践任务*
 
-       - 理解什么是阻塞（同步IO），非阻塞（异步IO），多路复用（select, poll, epoll）的IO技术
-       - 写一个网络聊天程序，有聊天服务器和多个聊天客户端（服务端用UDP对部分或所有的的聊天客户端进Multicast或Broadcast）
-       - 写一个简易的HTTP服务器
+      - 理解什么是阻塞（同步IO），非阻塞（异步IO），多路复用（select, poll, epoll）的IO技术
+      - 写一个网络聊天程序，有聊天服务器和多个聊天客户端（服务端用UDP对部分或所有的的聊天客户端进Multicast或Broadcast）
+      - 写一个简易的HTTP服务器
 
-****** [[https://book.douban.com/subject/26434599/][UNIX网络编程 卷2：进程间通信（第2版）]] 
+***** [[https://book.douban.com/subject/26434599/][## UNIX网络编程 卷2：进程间通信（第2版）]] 
 
-       信号量，管道，共享内存，消息等各种IPC…… 这些技术好像有点老掉牙了，不过还是值得了解
+      信号量，管道，共享内存，消息等各种IPC…… 这些技术好像有点老掉牙了，不过还是值得了解
 
-****** 实践任务
+***** *## 实践任务*
 
-       - 主要实践各种IPC进程序通信的方法
-       - 尝试写一个管道程序，父子进程通过管道交换数据
-       - 尝试写一个共享内存的程序，两个进程通过共享内存交换一个C的结构体数组
+      - 主要实践各种IPC进程序通信的方法
+      - 尝试写一个管道程序，父子进程通过管道交换数据
+      - 尝试写一个共享内存的程序，两个进程通过共享内存交换一个C的结构体数组
  
-****** 研究ACE
+***** *## 研究ACE*
 
-       有了多线程、多进程通信，TCP/IP，套接字，C++和设计模式的基本，你可以研究一下ACE了。使用ACE重写上述的聊天程序和HTTP服务器（带线程池）
+      有了多线程、多进程通信，TCP/IP，套接字，C++和设计模式的基本，你可以研究一下ACE了。使用ACE重写上述的聊天程序和HTTP服务器（带线程池）
 
-****** 实践任务
+***** *## 实践任务*
 
-       通过以上的所有知识，尝试
+      通过以上的所有知识，尝试
 
-       - 写一个服务端给客户端传大文件，要求把100M的带宽用到80%以上。（注意，磁盘I/O和网络I/O可能会很有问题，想一想怎么解决，另外，请注意网络传输最大单元MTU）
-       - 了解BT下载的工作原理，用多进程的方式模拟BT下载的原理
+      - 写一个服务端给客户端传大文件，要求把100M的带宽用到80%以上。（注意，磁盘I/O和网络I/O可能会很有问题，想一想怎么解决，另外，请注意网络传输最大单元MTU）
+      - 了解BT下载的工作原理，用多进程的方式模拟BT下载的原理
 
-****** [[https://book.douban.com/subject/20471211/][Linux多线程服务端编程: 使用muduo C++网络库]] 及作者在 Boolan 上开设的网络编程实战视频教程
-
-
-***** *# 系统架构* 
-
-      - *负载均衡* HASH式的，纯动态式的。（可以到Google学术里搜一些关于负载均衡的文章读读）
-      - *多层分布式系统* 客户端服务结点层、计算结点层、数据cache层，数据层。J2EE是经典的多层结构
-      - *CDN系统* 就近访问，内容边缘化
-      - *P2P式系统* 研究一下BT和电驴的算法。比如：DHT算法
-      - *服务器备份* 双机备份系统（Live-Standby和Live-Live系统），两台机器如何通过心跳监测对方？集群主结点备份
-      - *虚拟化技术* 使用这个技术，可以把操作系统当应用程序一下切换或重新配置和部署
-      - *学习Thrift* 二进制的高性能的通讯中间件，支持数据(对象)序列化和多种类型的RPC服务
-      - *学习Hadoop* Hadoop框架中最核心的设计就是：MapReduce和HDFS。MapReduce的思想是由Google的一篇论文所提及而被广为流传的，简单的一句话解释MapReduce就是“任务的分解与结果的汇总”。HDFS是Hadoop分布式文件系统（Hadoop Distributed File System）的缩写，为分布式计算存储提供了底层支持
-      - *了解NoSQL数据库* 因为超大规模以及高并发的纯动态型网站日渐成为主流，而SNS类网站在数据存取过程中有着实时性等刚性需求，这使得目前NoSQL数据库慢慢成了人们所关注的焦点，并大有成为取代关系型数据库而成为未来主流数据存储模式的趋势。当前NoSQL数据库很多，大部分都是开源的，其中比较知名的有：MemcacheDB、Redis、Tokyo Cabinet(升级版为Kyoto Cabinet)、Flare、MongoDB、CouchDB、Cassandra、Voldemort等
+***** [[https://book.douban.com/subject/20471211/][## Linux多线程服务端编程: 使用muduo C++网络库]] 及作者在 Boolan 上开设的网络编程实战视频教程
 
 
-*** 闲暇生活
+**** *# 系统架构* 
 
-**** *读书*
-
-***** *# 小说类*
-
-      - *一句顶一万句* 电子版2017年11月份已经在 Kindle 上看过一遍了，现在是看实体书，1月开始
-      - *死刑判决* 2月1日开始并看完
-      - *面纱* 2月6日开始，2月15日看完
-      - *受戒* 2月8日开始，完成《受戒》，《大淖记事》，《邂逅》，《陈小手》阅读
-      - *金阁寺* 4月4日开始
-      - *局外人*
-      - *情人* 3月1日开始
-      - *1984* 3月4日看完序言
-      - *红佛夜奔*
-      - *横道世之介*
-      - *少年维特之烦恼*
-
-***** *# 诗歌* 
-
-      翻翻诗集，让苦和累的生活有点缓和剂
-
-      - *小王子* 2月10日看完，于网易蜗牛读书，我将小王子划在了诗歌中，由于特别喜欢
-      - *顾城诗精选*
-      - *海子的诗*
-      - *云雀叫了一整天*
-
-***** *# 其他杂项*
-
-      + *东京本屋* 1月开始
-      + *即兴判断* 1月18日开始，之后一周内看完
-      + *浮生六记* 2月2日开始
-      + *集异璧之大成* 2月10日开始
-      + *看不见的城市* 2月25日开始
-      + *恋人絮语* 4月2日开始
-      + *自控力* 4月9日开始
-      + *影响力* 4月9日开始
-      + *书与你* 
-
-
-**** *电影*
-
-     - 是枝裕和导演的电影* 1月11日添加
-       + *DONE* 步履不停 1月11  
-     - 杨德昌导演的电影* 1月29日添加
-       + *DONE* 牯岭街少年杀人事件 1月28日
-     - 姜文导演的电影* 【非必须，若时间允许，才看】
-       + *DONE* 让子弹飞 4月1日
-     - 吉卜力工作室的动漫电影 【同样非必须】
-       + *DONE* 侧耳倾听 2017年12月25日 近藤喜文导演
-       + *DONE* 千与千寻 1月23日 宫崎骏导演
-       + *DONE* 岁月的童话 2月21日 高畑（tian，二声）勋导演
-
-
-**** *动漫*
-   
-     - 狐妖小红娘
-     - 一人之下
-     - 迷域行者
-     - 火鸟
-     - *DONE* 命运石之门
-     - 永生之酒
-     - 刀语
-     - 罗小黑战记
-     - EVA新世纪福音战士
-     - *DONE* 龙与虎
-     - *DONE* 钢之炼金术师
-     - *DONE* 加速世界
-     - *DONE* 刀剑神域
-     - 混沌武士
-     - 攻壳机动队
-     - CLANNAD 
-
+     - *负载均衡* HASH式的，纯动态式的。（可以到Google学术里搜一些关于负载均衡的文章读读）
+     - *多层分布式系统* 客户端服务结点层、计算结点层、数据cache层，数据层。J2EE是经典的多层结构
+     - *CDN系统* 就近访问，内容边缘化
+     - *P2P式系统* 研究一下BT和电驴的算法。比如：DHT算法
+     - *服务器备份* 双机备份系统（Live-Standby和Live-Live系统），两台机器如何通过心跳监测对方？集群主结点备份
+     - *虚拟化技术* 使用这个技术，可以把操作系统当应用程序一下切换或重新配置和部署
+     - *学习Thrift* 二进制的高性能的通讯中间件，支持数据(对象)序列化和多种类型的RPC服务
+     - *学习Hadoop* Hadoop框架中最核心的设计就是：MapReduce和HDFS。MapReduce的思想是由Google的一篇论文所提及而被广为流传的，简单的一句话解释MapReduce就是“任务的分解与结果的汇总”。HDFS是Hadoop分布式文件系统（Hadoop Distributed File System）的缩写，为分布式计算存储提供了底层支持
+     - *了解NoSQL数据库* 因为超大规模以及高并发的纯动态型网站日渐成为主流，而SNS类网站在数据存取过程中有着实时性等刚性需求，这使得目前NoSQL数据库慢慢成了人们所关注的焦点，并大有成为取代关系型数据库而成为未来主流数据存储模式的趋势。当前NoSQL数据库很多，大部分都是开源的，其中比较知名的有：MemcacheDB、Redis、Tokyo Cabinet(升级版为Kyoto Cabinet)、Flare、MongoDB、CouchDB、Cassandra、Voldemort等
 
