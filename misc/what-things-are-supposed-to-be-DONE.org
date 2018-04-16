@@ -117,9 +117,11 @@
 **** *# 算法与数据结构* 
 
      - [[https://book.douban.com/subject/4065258/][算法:C语言实现(第1～4部分)基础知识、数据结构、排序及搜索(原书第3版)]]
+     - [[https://web.stanford.edu/class/cs97si/][CS 97SI: Introduction to Programming Contests]] Stanford课程，ppt写得比算法导论好多了
      - [[https://book.douban.com/subject/20432061/][算法导论]] 
        + 英文版书
-       + [[https://www.youtube.com/playlist?list=PLUl4u3cNGP61Oq3tWYp6V_F-5jb5L2iHb][MIT 6.006 Fall 2011 YouTube 课程视频]] 
+       + [[https://www.youtube.com/playlist?list=PLUl4u3cNGP61Oq3tWYp6V_F-5jb5L2iHb][MIT 6.006 Fall 2011 YouTube 课程视频]]
+       + 网络上的一些博客笔记和学习方法，例如，知乎上
 
 **** *# 操作系统* 
 
