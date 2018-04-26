@@ -68,7 +68,8 @@
 **** *# C++* 
     
      “C++是最需要学好的语言”（CoolShell博主陈皓语），参考博客 [[https://coolshell.cn/articles/4119.html][如何学好C++语言]] 和 [[https://coolshell.cn/articles/4990.html][程序员技术练级攻略]] 
-
+     
+     - Accelerated C++ PDF 电子版
      - 学习 [[https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-088-introduction-to-c-memory-management-and-c-object-oriented-programming-january-iap-2010/index.htm][（麻省理工免费课程）C语言内存管理和C++面向对象编程]]
      - [[https://book.douban.com/subject/25708312/][C++ Primer]] 这本初级读本可能让会你啃得很痛苦，所有的语言的特性和为什么都在里面了，好好读读
      - *TODO* 先把上两项弄的差不多了，在根据参考博客添加其他的 2018年4月14日添加

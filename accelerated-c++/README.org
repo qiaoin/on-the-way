@@ -1,0 +1,388 @@
+#+TITLE: Accelerated C++ 阅读笔记
+#+AUTHOR: qiaoin
+#+EMAIL: qiao.liubing@gmail.com
+#+OPTIONS: toc:3 num:nil
+#+STARTUP: showall
+#+DATE: 2018-04-17 20:47:12 [start]
+
+#+BEGIN_QUOTE
+将书中每章的 *Details* 部分摘录过来，方便自己之后重翻。并在之后的使用中，添加一些注释。因为有些还不知道怎么熟练使用。
+
+*TODO* 给 code-snippets 目录下的代码添加测试代码
+#+END_QUOTE
+
+**** Chapter 0 Getting Started
+
+     *Program Structure:* C++ programs are usually in *free form* , meaning that spaces are required only when they keep adjacent symbols from running together. In particular, newlines are just another kind of space, and usually have no additional special meaning. Where you choose to put spaces in a program can make it much easier or harder to read. Programs are normally indented to improve readability.
+
+     There are three entities that are not free-form:
+
+     - =string literals= characters enclosed in double quotes; may not span lines
+     - =#include name= must appear on a line by themselves (except for comments) \\
+       In C++, many fundamental facilities, such as input-output, are part of the =standard library= , rather than being part of the =core language= . This distinction is important because the core language is always available to all C++ programs, but you must explicitly ask for the parts of the standard library that you wish to use.
+     - =// comments= // followed by anything,; ends at the end of the current line. A comment that begins with =/*= is free-form; it ends with the first subsequent =*/= and can span multiple lines.
+
+     *Types* define data structures and operations on those data structures. C++ has two kinds of types: those built into the core language, such as =int= , and those that are defined outside the core language, such as =std::ostream= .
+
+     *Namespaces* are mechanism for grouping related names. Names from the standard library are defined in the namespace called =std= .
+
+     *String literals* begin and end with double quotes ( ="= ); each string literal must appear entirely on one line of the program. Some characters in string literals have special meaning when preceded by a backslash ( =\= ):
+
+     - =\n= newline character
+     - =\t= tab character
+     - =\b= backspace character
+     - =\"= treats this symbol as part of the string rather than as the string terminator
+     - =\'= same meaning as ='= in string literals, for consitency with character literals
+     - =\\= includes a =\= in the string, treating the next character as an ordinary character
+
+     *Definitions and headers:* Every name that a C++ program uses must have a corresponding definition. The standard library defines its names in headers, which programs access through =#include= . Names must be defined before they are used; hence, a =#include= must precede the use of any name from that header. The =<iostream>= header defines the library's input-output facilities.
+
+     *The main function:* Every C++ program must define exactly one function, named =main= , that returns an =int= . The implementation runs the program by calling =main= . A zero return from =main= indicates success; a nonzero return indicates failure. In general, functions must include at least one =return= statement and are not permitted to fall off the end of the function. The =main= function is special: It may omit the return; if it does so, the implementation will assume a zero return value. However, explicitly including a return from =main= is good practice.
+
+     *Braces and semicolons:* These inconspicuous symbols are important in C++ programs. They are easy to overlook because they are small, and they are important because forgetting one typically evokes compiler diagnostic messages that may be hard to understand.
+     
+     A sequence of zero or more statements enclosed in braces is a statement, called a *block* , which is a request to execute the constituent statements in the order in which they appear. The body of a function must be enclosed in braces, even if it is only a single statement. The statements between a pair of matching braces constitute a =scope= .
+
+     An expression followed by a semicolon is a statement, called an *expression statement* , which is a request to execute the expression for its side effects and discard its result. The expression is optional; omitting it results in a *null statement* , which has no effect.
+
+     *Output:* Evaluating =std::cout << e= writes the valued =e= on the standard-output stream, and yields =std::cout= , which has type =ostream= , as its value in order to allow chained output operations.
+
+
+**** Chapter 1 Working with strings
+
+     *Types:*
+
+     - =char= Built-in type that holds ordinary characters as defined by the implementation.
+     - =wchar_t= Built-in type intended to hold "wide characters", which are big enough to hold characters for languages such as Japanese.
+
+     *The string type* is define in the standard header =<string>= . An object of type =string= contains a sequence of zero or more characters. If =n= is an integer, =c= is a =char= , =is= is an input stream, and =os= is an output stream, then the =string= operations include:
+
+     - =std::string s;= Defines =s= as a variable of type =std::string= that is initially empty.
+     - =std::string t = s;= Defines =t= as a variable of type =std::string= that initially contains a copy of the characters in =s= , where =s= can be either a =string= or a string literal.
+     - =std::string z(n, c);= Defines =z= as a variable of type =std::string= that initially contains =n= copies of the character =c= . Here, =c= must be a =char= , not a =string= or a string literal.
+     - =os << s= Writes the characters contained in =s= , without any formatting changes, on hte output stream denoted by =os= . The result of the expression is =os= .
+     - =is >> s= Reads and discards characters from the stream denoted by =is= until encountering a character that is not whitespace. Then reads successive characters from =is= into =s= , overwriting whatever value =s= have had, until the next character read would be whitespace. The result is =is= .
+     - =s + t= The result of this expression is an =std::string= that contains a copy of the characters in =s= followed by a copy of the characters in =t= . Either =s= or =t= , but not both, may be a string literal or a value of type =char= .
+     - =s.size()= The number of characters in =s= .
+
+     *Variables* can be defined in one of three ways:
+
+     - ~std::string hello = "Hello";  // define the variable with an explicit initially~
+     - ~std::string stars(100, '*');  // construct the variable according to its type and the given expression~
+     - ~std::string name;  // define the variable with an implicit initialion which depends on its type~
+
+     Variables defined inside a pair of curly braces are local variables, which exist only while executing the part of the program within the braces. When the implementation reaches the =}= , it destroys the variables, and returns any memory that they occupied to the system. Defining a variable as =const= promises that the variable's value, will not change during its lifetime. Such a variable must be initialized as part of its definition, because there is no way to do so later.
+
+     *Input:* Executing =std::cin >> v= discards any whitespace characters in the standard input stream, then reads from the standard input into variable =v= . It returns =std::cin= , which has type =istream= , in order to allow chained input operations.
+
+
+**** Chapter 2 Looping and counting
+
+     *Expressions:* C++ inherits a rich set of operators from C, several of which we have already used. In addition, as we've already seen with the input and output operators, C++ programs can extend the core language by defining what it means to apply built-in operators to objects of class type. Correctly understanding complicated expressions is a fundamental prerequisite to effective programming in C++. Understanding such expressions requires understanding:
+
+     - How the operands groups, which is controlled by the precedence and associativity of the operators used in the expression
+     - How the operands will be converted to other types, if at all
+     - The order in which the operands are evaluated
+
+     Different operators have different precedence. Most of the operators are left-associative, although the assignment operators and the operators taking a single argument are right-associative. We list the most common operators here regardless of whether we've used them in this chapter. We've ordered them by precedence from highest to lowest, with a double line separating groupings with the same precedence.
+
+     - =x.y= The member =y= of object =x=
+     - =x[y]= The element in object =x= indexed by =y=
+     - =x++= Increments =x= , returning the original value of =x=
+     - =x--= Decrements =x= , returning the original value of =x=
+     - ++++++++++
+     - =++x= Increments =x= , returning the incremented value
+     - =--x= Decrements =x= , returning the decremented value
+     - =!x= Logical negation. If =x= is =true= then =!x= is =false=
+     - ++++++++++
+     - =x * y= Product of =x= and =y=
+     - =x / y= Quotient of =x= and =y= . If both operands are integers, the implementation chooses whether to round toward zero
+     - =x % y= Remainder of =x= divided by =y= , equivalent to =x - ((x / y) * y)=
+     - ++++++++++
+     - =x + y= Sum of =x= and =y=
+     - =x - y= Resulet of subtracting =y= from =x=
+     - =x >> y= For integral =x= and =y= , =x= shifted right by =x= bits; =y= must be non-negative. If =x= is an =istream= , reads from =x= into =y=
+     - =x << y= For integral =x= and =y= , =x= shifted left by =y= bits; =y= must be non-negative. If =x= is an =ostream= , writes =y= onto =x=
+     - ++++++++++
+     - =x relop y= Relational operators yield a =bool= indicating the truth of the relation. The operators ( =<= , =>= , ~<=~ , ~>=~ ) have their obvious meanings
+     - ++++++++++
+     - ~x == y~ Yields a =bool= indicating whether =x= equals =y=
+     - ~x != y~ Yields a =bool= indicating whether =x= is not equal to =y=
+     - ++++++++++
+     - =x && y= Yields a =bool= indicating whether both =x= and =y= are =true= . Evaluates =y= only if =x= is =true=
+     - ++++++++++
+     - =x || y= Yields a =bool= indicating whether either =x= or =y= is =true= . Evaluates =y= only if =x= is =false=
+     - ++++++++++
+     - ~x = y~ Assign the value =y= to =x= , yielding =x= as its result 
+     - ~x op= y~ Compound assignment operators; equivalent to ~x = x op y~ , where =op= is an arithmetic or shift operator
+     - ++++++++++
+     - =x ? y1 : y2= Yields =y1= if =x= is =true= ; =y2= otherwise. Evaluates only one of =t1= and =y2=
+
+     There is usually no guarantee as to the order in which an expression's operands are evaluated. Because the order of evaluation is not fixed, it is important to avoid writing a single expression in which one operand depends on the value of another operand.
+
+     Operands will be converted to the appropriate type when possible. Numeric operands in expressions or relational expressions are converted by the *usual arithmetic conversions* . Basically, the usual arithmetic conversions attempt to preserve precision. Smaller types are converted to larger types, and signed types are converted to unsigned. Arithmetic values may be converted to =bool= : A value of =0= is considered =false= ; any other value is =true= . Operands of class type are converted as specified by the type.
+
+     *Types:*
+
+     - =bool= Built-in type representing truth values; may be either =true= or =false=
+     - =unsigned= Integral type that contains only non-negative values
+     - =short= Integral type that must hold at least 16 bits
+     - =long= Integral type that must hold at least 32 bits
+     - =size_t= Unsigned integral type (from =<cstddef>= ) that can hold any object's size
+     - =string::size_type= Unsigned integral type that can hold the size of any =string=
+
+     *Half-open ranges* include one but not both of their endpoints. For example, =[1, 3)= includes =1= and =2= , but not =3= .
+
+     *Condition:* An expression that yields a truth value. Arithmetic values used in conditions are converted to =bool= : Nonzero values convert to =true= ; zero values convert to =false= .
+
+     *Statements:*
+
+     - =Using namespace-name::name;= Defines name as a synonym for =namespace-name::name=
+     - =type-name name;= Defines name with type =type-name=
+     - ~type-name name = value;~ Defines name with type =type-name= initialized as a copy of value 
+     - =type-name name(args);= Defines name with type =type-name= constructed as appropriate for the given arguments in =args= 
+     - =expression;= Executes =expression= for its side effects
+     - ={ statement(s) }= Called a block. Executes the sequence of zero or more =statement(s)= in order. May be used wherever a =statement= is expected. Variables defined inside the braces have scope limited to the block
+     - =while (condition) { statement(s) }= If =condition= is =false= , do nothing; otherwise, execute =statement(s)= and then repeat the entire =while=
+     - =for (init-statement; condition; expression) { statement(s) }= Equivalent to ={ init-statement while (condition) { statement(s) } }=
+     - =if (condition) { statement(s) }= Executes =statement(s)= if =condition= is =true=
+     - =if (condition) { statement1(s) } else { statement2(s) }= Executes =statement1(s)= if =condition= is =true= , otherwise executes =statement2(s)= . Each =else= is associated with the nearest matching =if=
+     - =return val;= Exit the function and returns =val= to its caller
+
+
+**** Chapter 3 Working with batches of data
+
+     *Local variables* are default-initialized if they are defined without an explicit initializer. Default-initialization of a built-in type means that the value is *undefined* . Undefined values may be used only as the left-hand side of an assignment.
+
+     *Type definitions:* =typedef type name;= Defines =name= as a synonym for =type=
+
+     *The vector type* , defined in =<vector>= , is a library type that is a container that holds a sequence of values of a specified type, vectors grow dynamically. Some important operations are:
+
+     - =vector<T>::size_type= A type guaranteed to be able to hold the number of elements in the largest possible =vector=
+     - =v.begin()= Returns a value that denotes the first element in =v=
+     - =v.end()= Returns a value that donotes (one past) the last element in =v=
+     - =vector<T> v;= Creates an empty vector taht can hold elements of type =T=
+     - =v.push_back(e)= Grows the vector by one element initialized to =e=
+     - =v[i]= Returns the value stored in popsition =i=
+     - =v.size()= Returns the number of elements in =v=
+
+     *Other library facilities*
+
+     - =sort(b, e)= Rearranges the elements defined by the range =[b, e)= into nondecreasing order. Defined in =<algorithm>=
+     - =max(e1, e2)= Returns the larger of the expressions =e1= and =e2= ; =e1= and =e2= must have exactly the same type. Defined in =<algorithm>=
+     - =while (cin >> x)= Reads a value of an appropriate type into =x= and tests the state of the stream. If teh stream if in an error state, the test fails; otherwise, the test succeeds, and teh body of the =while= is executed
+     - =s.precision(n)= Sets the precision of the stream =s= to =n= for future output (or leaves it unchanged if =n= is omitted). Returns the previous precision
+     - =setprecision(n)= Returns a value that, when written on an output stream =s= , has the effect of calling =s.precision(n)= . Defined in =<iomapip>=
+     - =streamsize= The type of the value expected by =setprecision= and return by =precision= . Defined in =<ios>=
+
+
+**** Chapter 4 Organizing programs and data
+
+     *Program structure:*
+
+     - =#include <system-header>= Angle brackets, =< >= , enclose system headers. System headers may or may not be implemented as files
+     - =#include "user-defined-header-file-name"= User-defined header files are =include= d by enclosing the name in quotes. Typically, user-defined headers have a suffix of =.h= \\
+       Header files should be guarded against multiple inclusion by wrapping the file in an =ifndef GUARD_header_name_h= directive. Headers should avoid declaring names that they do not use. In particular, they should not include =using= -declarations, but instead should prefix standard-library names with =std::= explicitly.
+
+     *Types:*
+
+     - =T&= Denotes a reference to the type =T= . Most commonly used to pass a parameter that a function may change. Arguments to such parameters must be *lvalues* .
+     - =const T&= Denotes a reference to the type =T= that may not be used to change the value to which the reference is bound. Usually used to avoid cost of copying a parameter to a function.
+
+     *Structures:* A structure is a type that contains zero or more members. Each object of the structure type contains its own instance of each of its members. Every structure must have a corresponding definition:
+     #+BEGIN_SRC c++
+     struct type-name {
+         type-specifier member-name;
+         ...
+     };  // note the semicolon
+     #+END_SRC
+     Like all definitions, a structure definition may appear only once per source file, so it should normally appear in a properly guarded header file.
+
+     *Functions:* A function must be declared in every source file that uses it, and defined only once. The declarations and definitions have similar forms:
+     #+BEGIN_SRC c++
+     ret-type function-name(parm-decls);  // function declaration
+     [in-line] ret-type function-name(parm-decls) {  // function definition
+         // function body goes here
+     }
+     #+END_SRC
+     Here, =ret-type= is the type that the function returns, =parm-decls= is a comma-separated list of the types for the parameters of the function. Functions must be declared before they are called. Each argument's type must be compatible with the corresponding parameter. A different syntax is necessary to declare or define functions with sufficiently complicated return types.
+
+     Function names may be *overloaded:* The same =function-name= may define multiple functions so long as the functions differ in the number or types of the parameters. The implementation can distinguish between a reference and a =const= reference to the same type. *Confused*
+
+     We can optionally qualify a funcion definition with =inline= , which asks the compiler to expand calls to the function inline when appropriate, that is, to avoid function-call overhead by replacing each call to the function by a copy of the function body, modified as necessary. To do so, the compiler needs to be able to see the function definition, so =inline= s are usually defined in header files, rather than in source files.
+
+     *Exception handling:*
+
+     - =try { // code= Initiates a block that might =throw= an exception
+     - =} catch (t) { /* code */ }= Concludes the =try= block and handles exceptions that match the type =t= . The code following the =catch= performs whatever action is appropriate to handle the exception reported in =t=
+     - =throw e;= Terminates the current function; throws the value =e= back to the caller
+
+     *Exception classes:* The library defines several exception classes whose names suggest the kinds of problems they might be used to report:
+
+     - =logic_error=
+     - =domain_error=
+     - =invalid_argument=
+     - =length_error=
+     - =out_of_range=
+     - =runtime_error=
+     - =range_error=
+     - =overflow_error=
+     - =underflow_error=
+
+     =e.what()= Returns a value that reports on what happened to cause the error
+
+     *Library facilities:*
+
+     - =s1 < s2= Compares =string= s =s1= and =s2= by applying dictionary ordering
+     - =s.width(n)= Set the width of stream =s= to =n= for the next output operation (or leaves it unchanged if =n= is omitted). The output is padded on the left to the given width. Returns the previous width. The standard output operators use the existing width value and then call =width(0)= to reset the width
+     - =setw(n)= Returns a value of type =streamsize= that, when written on an ouput stream =s= , has the effect of calling =s.width(n)=
+     
+
+**** Chapter 5 Using sequential containers and analyzing strings
+
+     *Containers and iterators:* The standard library is designed so that similar operations on different containers have the same interface and the same semantics. The containers we have used so far are all *sequential* containers. The library also provides associative containers. All the sequential containers and the =string= type provide the following operations:
+
+     - =container<T>::iterator=
+     - =container<T>::const_iterator= The name of the type of the iterator on this container
+     - =container<T>::size_type= The name of the appropriate type to hold the size of the largest possible instance of this container
+     - =c.begin()=
+     - =c.end()= Iterators referring to the first and (one past) the last element in the container
+     - =c.rbegin()=
+     - =c.rend()= Iterators referring to the last and (one beyond) the first element in the container that grant access to the container's elements in reverse order
+     - =container<T> c;=
+     - =container<T> c(c2);= Defines =c= as a container that is empty or a copy of =c2= if given
+     - =container<T> c(n);= Defines =c= as a container with =n= elements that are *value-initialized* according to the type of =T= . If =T= is a class type, that type will control how to initialize the elements. If =T= is a built-in arithmetic type, then the elements will be initialized to 0
+     - =container<T> c(n, t);= Defines =c= as container with =n= elements that are copies of =t=
+     - =container<T> c(b, e);= Creates a container that holds a copy of the elements denoted by iterators in the range =[b, e)=
+     - ~c = c2;~ Replaces the contents of container =c= with a copy of the container =c2=
+     - =c.size()= Returns the number of elements in =c= as a =size_type=
+     - =c.empty()= Predicate that indicates whether =c= has no elements
+     - =c.insert(d, b, e)= Copies elements denoted by iterators in range =[b, e)= and inserts them into =c= immediately before =d=
+     - =c.erase(it)=
+     - =c.erase(b, e)= Removes the element denoted by =it= or the range of elements denoted by =[b, e)= from the container =c= . This operation is fast for =list= but can be slow for =vector= and =string= , because for these types it involves copying all the elements after the one that is removed. For =list= , iterators to the element(s) that are erased are invalidated. For =vector= and =string= , all iterators to elements after the one eraed are invalidated
+     - =c.push_back(t)= Adds an element to the end of =c= with the value =t=
+     - =c[n]= Containers that support random access, and the =string= type, also provide this operation. Fetches the character at position =n= from the container =c=
+
+     *Iterator operations:*
+
+     - =*it= Dereferences the iterator =it= to obtain the value stored in the container at the position that =it= denotes. This operation is often combined with =.= to obtain a member of a class object, as in =(*it).x= , which yields the member =x= of the object denoted by the iterator =it= . =*= has lower precedence than =.= and the smae precedence as =++= and =-=
+     - =it->x= Equivalent to =(*it).x= , which returns the member =x= denoted by the object obtained by dereferencing the iterator =it= . Same prededence as the =.= operator
+     - =++it= 
+     - =it++= Increments the iterator so that it denotes the next element in the container
+     - ~b == e~
+     - ~b != e~ Compares two iterator for equality or inequality
+     
+     *The string type* offers iterators that support the same operations as do iterators on =vector= s. In particular, =string= supports full random access. In addition to the operations on containers, =string= also provides:
+
+     - =s.substr(i, j)= Creates a new =string= that holds a copy of teh characters in =s= with indices in the range =[i, i+j)=
+     - =getline(is, s)= Reads a line of input from =is= and stores it in =s=
+     - ~s += s2~ Replaces the value of =s= by =s + s2= 
+
+     *The vector type* offers the most powerful iterators, called random-access iterators, of any of the library containers.
+     
+     Although all the functions we've written have relied on  dynamically allocating our =vector= elements, there are also mechanisms for preallocating elements, and an operation to direct the =vector= to allocate, but not to use, additional memory in order to avoid the overhead of repeated memory allocations.
+
+     - =v.reserve(n)= Reserves space to hold =n= elements, but does not initialize them. This operation does not change the size of the container. It affects only the frequency with which vector may have to allocate memory in response to repeated call to =insert= or =push_back=
+     - =v.resize(n)= Given =v= a new size equal to =n= . If =n= is smaller than the current size of =v= , elements beyond =n= are removed from the =vector= . If =n= is greater than the current size, then new elements are added to =v= and initialized as appropriate to the type in =v=
+
+     *The list type* is optimized for efficiently inserting and deleting elements at any point in the container. The operations on =list= s and list iterators include those described above. In addition,
+
+     - =l.sort()=
+     - =l.sort(cmp)= Sorts the elements in =l= using the =<= operator for the type in the =list= , or the predicate =cmp=
+
+     *The <cctype> header* provides useful functions for manipulating character data:
+
+     - =isspace(c)= =true= if =c= is a whitespace character
+     - =isalpha(c)= =true= if =c= is an alphabetic character
+     - =isdigit(c)= =true= if =c= is a digit character
+     - =isalnum(c)= =true= if =c= is a letter or a digit
+     - =ispunct(c)= =true= if =c= is a punctuation character
+     - =isupper(c)= =true= if =c= is an uppercase letter
+     - =islower(c)= =true= if =c= is a lowercase letter
+     - =toupper(c)= Yields the uppercase equivalent to =c=
+     - =tolower(c)= Yields the lowercase equivalent to =c=
+
+
+**** Chapter 6 Using library algorithms
+
+     *Type modifiers:*
+
+     =static type variable;= For local declarations, declares variable with =static= storage class. The value of variable persists across executions of this scope and is guaranteed to be initialized before the variable is used for the first time. When the program exits from the scope, the variable keeps its value until the next time the program enters that scope.
+
+     *Type:* The built-in type =void= can be used in a restricted number of ways, one of which is to indicate that a function yields no return value. Such functions can be exited through a =return= ; that has no value or by falling off the end of the function.
+
+     *Iterator adaptors* are functions that yields iterators. The most common are the adaptors that generate =insert_iterators= , which are iterators that grow the associated container dynamically. Such iterators can be used safely as the destination of a copying algorithm. They are defined in header =<iterator>= :
+
+     - =back_inserter(c)= Yields an iterator on the container =c= that appends elements =c= . The container must support =push_back= , which the =list= , =vector= , and the =string= types all do
+     - =front_inserter(c)= Like =back_inserter= , but inserts at the front of the container. The container must support =push_front= , which =list= does, but =string= and =vector= do not
+     - =inserter(c, it)= Like =bake_inserter= , but inserts elements before the iterator =it=
+
+     *Algorithms:* Unless otherwise indicated, =<algorithm>= defines these algorithms:
+
+     - =accumulate(b, e, t)= Creates a local variable and initializes it to a copy of =t= (with the same type as =t= , which means that the type of =t= is crucially important to the behavior of =accumulate= ), adds each element in the range =[b, e)= to the variable, and returns a copy of the variable as its result. Defined in =<numeric>=
+     - =find(b, e, t)=
+     - =find_if(b, e, p)=
+     - =search(b, e, b2, e2)= Algorithms to look for a given value in the sequence =[b, e)= . The =find= algorithm looks for the value =t= ; the =find_if= algorithm tests each element against the predicate =p= ; the =search= algorithm looks for the sequence denote by =[b2, e2)=
+     - =copy(b, e, d)=
+     - =remove_copy(b, e, d, t)=
+     - =remove_copy_if(b, e, d, p)= Algorithms to copy the sequence from =[b, e)= to the destination denoted by =d= . The =copy= algorithm copies the entire sequence; =remove_copy= copies all elements not equal to =t= ; and =remove_copy_if= copies all elements for which the predicate =p= fails
+     - =remove_if(b, e, p)= Arranges the container so that the elements in the range =[b, e)= for which the predicate =p= is false are at the front of the range. Returns an iterator denoting one past the range of these "unremoved" elements
+     - =remove(b, e, t)= Like =remove_if= , but tests which elements to keep against the value =t=
+     - =transform(b, e, d, f)= Runs the functions =f= on the elements in the range =[b, e)= , storing the result of =f= in =d=
+     - =partition(b, e, p)=
+     - =stable_partition(b, e, p)= Partitions the elements in range =[b, e)= , based on the predicate =p= , so that elements for which the predicate is =true= are at the front of the container. Returns an iterator to the first element for which the predicate is =false= , or =e= if the predicate is =true= for all elements. The =stable_partition= function maintains the input order among the elements in each partition
+
+
+**** Chapter 7 Using associative containers
+
+     *The do while statement* is similar to the =while= statement, except that the test is at the end. The general form of the statement is
+     #+BEGIN_SRC c++
+     do {
+         statement(s)
+     } while (condition);
+     #+END_SRC
+     The =statement(s)= is executed first, after which the =condition= and =statement(s)= are executed alternately until the =condition= is =false=
+
+     *Value-initialization:* Accessing a =map= element that doesn't yet exist creates an element with a value of =V()= , where =V= is the type of the values stored in the =map= . Such an expression is said to be value-initialized. The most important aspect of value-initialized is that built-in types are initialized to =0=
+
+     *rand()* is a function that yields a random integer in the range =[0, RAND_MAX]= . Both =rand= and =RAND_MAX= are defined in =<cstdlib>=
+
+     *pair<K, V>* is a simple type whose objects hold pairs of values. Access to these data values is through their names, =first= and =second= respectively
+
+     *map<K, V>* is an associative array with key type =K= and value type =V= . The elements of a =map= are key-value pairs, which are maintained in key order to allow efficient access of elements by key. The iterators on =map= s are *bidirectional* . Dereferencing a map iterator yields a value of type =pair<const K, V>= . The =map= operations include:
+
+     - =map<K, V> m;= Creates new empty =map= , with keys of type =const K= and values of type =V=
+     - =map<K, V> m(cmp);= Creates a new empty =map= with keys of type =const K= and values of type =V= , that uses the predicate =cmp= to determine the order of the elements
+     - =m[k]= Indexes the =map= using a key =k= of type =K= , and returns an *lvalue* of type =V= . If there is no entry for the given key, a new *value-initialized* element is created and inserted into the =map= with this key. Becuase using =[]= to access a =map= might create a new element, =[]= is not allowed on a =const map=
+     - =m.begin()=
+     - =m.end()= Return iterators that can be used to access the elements of a =map= . Note that dereferencing one of these iterators yields a key-value pair, not just a value
+     - m.find(k) Returns an iterator referring to the element with key =k= , or =m.end()= if no such element exists
+
+     For a =map<K, V>= and an associated iterator =p= , the following apply:
+     
+     - =p->first= Yields an *lvalue* of type =const K= that is the key for the element =p= denotes
+     - =p->second= Yields an *lvalue* of type =V= that is the value part of the element that =p= denotes
+
+ 
+**** Chapter 8 Writing generic functions
+
+**** Chapter 9 Defining new types
+
+**** Chapter 10 Managing memory and low-level data structures
+
+**** Chapter 11 Defining abstract data types
+
+**** Chapter 12 Making class ojects act like values
+
+**** Chapter 13 Using inheritance and dynamic binding
+
+**** Chapter 14 Managing memory (almost) automatically
+
+**** Chapter 15 Revisiting character pictures
+
+**** Chapter 16 Where do we go from here?
+
+**** Appendix A Language details
+
+**** Appendix B Library summary
+
