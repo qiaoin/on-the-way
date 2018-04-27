@@ -23,11 +23,12 @@ I come, I read, I practice, and I understanding.
 [[./how-to-find-a-book-to-read.md][如何找到一本好书来看？]] 
 #+END_QUOTE
 
-- [[./the-practive-of-programming][The Practice of Programming]] (程序设计实践)
-- [[./sicp][Structure and Interpretation of Computer Programs]] (SICP, 计算机程序的构造与解释)
-- [[./programming-pearls][Programming Pearls]] (编程珠玑)
-- [[./unix-network-programming-vol1][Unix Network Programming, Volume 1: The Sockets Networking API]] (Unix 网络编程 卷1: 套接字联网 API)
+- [[./accelerated-c++][Accelerated C++]] 
 - Future of Code (代码的未来)
+- [[./programming-pearls][Programming Pearls]] (编程珠玑)
+- [[./sicp][Structure and Interpretation of Computer Programs]] (SICP, 计算机程序的构造与解释)
+- [[./the-practive-of-programming][The Practice of Programming]] (程序设计实践)
+- [[./unix-network-programming-vol1][Unix Network Programming, Volume 1: The Sockets Networking API]] (Unix 网络编程 卷1: 套接字联网 API)
 
 
 ** *Hacking!*
