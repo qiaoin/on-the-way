@@ -20,6 +20,11 @@
      - =string literals= characters enclosed in double quotes; may not span lines
      - =#include name= must appear on a line by themselves (except for comments) \\
        In C++, many fundamental facilities, such as input-output, are part of the =standard library= , rather than being part of the =core language= . This distinction is important because the core language is always available to all C++ programs, but you must explicitly ask for the parts of the standard library that you wish to use.
+       
+       *来自 C++ Primer 推荐序3*
+
+       什么是一门语言的核心部分呢？就是指一门语言不需要任何库（包括标准库）支持的那部分。只要是一个符合标准的 C++ 语言的编译器，无论运行在什么硬件和操作系统上，只要程序员使用的是 C++ 语言，就应该可以使用的那部分语言特性。比如，基本类型和量化饰词、基本语句如 =if= 和 =for= 、函数声明语法、外部连接指示等，这些就属于语言核心。而像 STL 提供的标准容器如 =vector= 和 =map= 、标准算法如 =find= 和 =sort= 等就不属于语言核心。
+
      - =// comments= // followed by anything,; ends at the end of the current line. A comment that begins with =/*= is free-form; it ends with the first subsequent =*/= and can span multiple lines.
 
      *Types* define data structures and operations on those data structures. C++ has two kinds of types: those built into the core language, such as =int= , and those that are defined outside the core language, such as =std::ostream= .
