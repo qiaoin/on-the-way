@@ -1,0 +1,13 @@
+#+TITLE: 编程时，需要培养的好习惯
+#+AUTHOR: qiaoin
+#+EMAIL: qiao.liubing@gmail.com
+#+OPTIONS: toc:3 num:nil
+#+STARTUP: showall
+#+DATE: 2018-05-02 09:45:49 [start]
+
+**** 思考清楚再开始编码
+
+**** 良好的代码命名和缩进对齐习惯
+
+**** 能够进行单元测试
+
