@@ -15,5 +15,9 @@
 |----+------------------+------------+--------+--------|
 | 05 | 替换空格         | [[https://www.nowcoder.com/practice/4060ac7e3e404ad1a894ef3e17650423?tpId=13&tqId=11155&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking][链接]]       | [[./replace_space.cc][C++]]    | 字符串 |
 |----+------------------+------------+--------+--------|
+| 06 | 从尾到头打印链表 | [[https://www.nowcoder.com/practice/d0267f7f55b3412ba93bd35cfa8e8035?tpId=13&tqId=11156&tPage=1&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking][链接]]       | [[./print_list_from_tail_to_head.cc][C++]]    | 链表   |
+|----+------------------+------------+--------+--------|
+| 07 | 重建二叉树       | [[https://www.nowcoder.com/practice/8a19cbe657394eeaac2f6ea9b0f6fcf6?tpId=13&tqId=11157&tPage=1&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking][链接]]       | [[./reconstruct_binary_tree.cc][C++]]    | 树     |
+|----+------------------+------------+--------+--------|
 |    |                  |            |        |        |
 
