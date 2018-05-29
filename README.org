@@ -20,7 +20,7 @@ I come, I read, I practice, and I understanding.
 ** *Reading*
 
 #+BEGIN_QUOTE
-[[./misc/how-to-find-a-book-to-read.org][如何找到一本好书来看？]]  
+[[./misc/how-to-find-a-book-to-read.org][如何找到一本好书来看？]] 
 #+END_QUOTE
 
 - [[./accelerated-c++][Accelerated C++]] 
@@ -29,6 +29,7 @@ I come, I read, I practice, and I understanding.
 - [[./sicp][Structure and Interpretation of Computer Programs]] (SICP, 计算机程序的构造与解释)
 - [[./the-practive-of-programming][The Practice of Programming]] (程序设计实践)
 - [[./unix-network-programming-vol1][Unix Network Programming, Volume 1: The Sockets Networking API]] (Unix 网络编程 卷1: 套接字联网 API)
+- [[./illustration-http][Illustration HTTP]] (图解 HTTP)
 
 
 ** *Hacking!*
