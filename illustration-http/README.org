@@ -60,11 +60,11 @@
 **** 请求报文
 
      #+BEGIN_QUOTE
-     GET /index.htm HTTP/1.1
-     Host: www.example.com
-     Connection: keep-alive
-     Content-Type: application/x-www-form-urlencoded
-     Content-Length: 16
+     GET /index.htm HTTP/1.1 \\
+     Host: www.example.com \\
+     Connection: keep-alive \\
+     Content-Type: application/x-www-form-urlencoded \\
+     Content-Length: 16 \\
 
      name=qiaoin&age=24
      #+END_QUOTE
@@ -79,10 +79,10 @@
 **** 响应报文
 
      #+BEGIN_QUOTE
-     HTTP/1.1 200 OK
-     Date: Mon, 28 May 2018 13:56:49 GMT
-     Content-Length: 362
-     Content-Type: text/html
+     HTTP/1.1 200 OK \\
+     Date: Mon, 28 May 2018 13:56:49 GMT \\
+     Content-Length: 362 \\
+     Content-Type: text/html \\
 
      <html>
      ......
