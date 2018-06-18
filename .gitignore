@@ -1,2 +1,6 @@
 # for macOS
 .DS_Store
+
+# for test file
+main.c
+a.out
