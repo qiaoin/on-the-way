@@ -9,6 +9,8 @@
 
 - RDMA Aware Networks Programming User Manual (Rev 1.7)
 - Minimizing the Hidden Cost of RDMA
+- 
+- C++ Concurrency in Action: Practical Multithreading
 
 ** 什么是 RDMA ？
 
@@ -363,9 +365,318 @@
       }
     #+END_SRC
 
-    如下图所示，假设有四台 IB Device，即四个节点，每个节点会创建三个 Pair 实例对象，在 Pair 的构造函数中会对私有变量 =Address self_= 进行填充（主要用于 QP 建立连接），将这些 =self_= 的值添加到 =allBytes= 中去，并将 =allBytes= 写入 =store= 中， =key= 为当前节点的 =rank= 号。等待所有节点将各自维护的 Pairs 的 =self_= 信息 *set* 入 =store= ，对于每一个节点上的 Pair 都知道要与其建立连接的对端信息 =Address peer_= ，即 =pairs[i]->connect(addr);= ，将 =pair[i]= 中的 =qp_= 状态从 *INIT* -> *RTR* -> *RTS* ，之后该 QP 就可以执行 RDMA 数据传输操作了。但需要注意的是，每一个节点仅会将其上维护的 =pairs= 中包含的 QP 的状态进行转变，每一个 QP 连接的对端都是由各自节点分别执行的，举例来说， ~rank=0~ 上的 =pairs[1]= 中包含的 =qp_= 的状态从 *INIT* -> *RTR* -> *RTS* ，其对端为 ~rank=1~ 上的 =pairs[0]= ，其包含的 =qp_= 状态也是由 *INIT* -> *RTR* -> *RTS* ，分别在各自节点上执行 =Pair::connect()= 。 *每个节点上* 执行完此 =connectFullMesh()= 函数之后，每个节点上的 Pairs 实例对象所包含的 QPs 均处于 *RTS* 状态。至此，所有节点之间的 RDMA 连接均建立成功，就可以进行后续的 RDMA 操作了。
+    如下图所示，假设有四台 IB Device，即四个节点，每个节点会创建三个 Pair 实例对象，在 Pair 的构造函数中会对私有变量 =Address self_= 进行填充（主要用于 QP 建立连接，QP 的状态 *INIT* -> *RTR* 需要用到对端信息），将这些 =self_= 的值添加到 =allBytes= 中去，并将 =allBytes= 写入 =store= 中， =key= 为当前节点的 =rank= 号。等待所有节点将各自维护的 Pairs 的 =self_= 信息 *set* 入 =store= ，之后再对应取出，这样每一个节点上的 Pair 都知道要与其建立连接的对端信息 =Address peer_= 了，执行 =pairs[i]->connect(addr);= ，将 =pair[i]= 中的 =qp_= 状态从 *INIT* -> *RTR* -> *RTS* ，之后该 QP 就可以执行 RDMA 数据传输操作了。
+
+    [[../images/pair-connection.pdf]] 
+
+    但需要注意的是，每一个节点仅会将其上维护的 =pairs= 中包含的 QP 的状态进行转变，每一个 QP 连接的对端都是由各自节点分别执行的，举例来说， ~rank=0~ 上的 =pairs[1]= 中包含的 =qp_= 的状态从 *INIT* -> *RTR* -> *RTS* ，其对端为 ~rank=1~ 上的 =pairs[0]= ，其包含的 =qp_= 状态也是由 *INIT* -> *RTR* -> *RTS* ，分别在各自节点上执行 =Pair::connect()= 。在 *每个节点上* 执行完此 =connectFullMesh()= 函数之后，每个节点上的 Pairs 实例对象所包含的 QPs 均处于 *RTS* 状态。至此，所有节点之间的 RDMA 连接均建立成功，就可以进行后续的 RDMA 操作了。
      
+    pair.cc / pair.h 对外提供的接口主要有：
+
+    - =std::unique_ptr<::gloo::transport::Buffer> Pair::createSendBuffer(int slot, void* ptr, size_t size);= 创建发送缓冲区
+    - =std::unique_ptr<::gloo::transport::Buffer> Pair::createRecvBuffer(int slot, void* ptr, size_t size);= 创建接收缓冲区
+
+    #+BEGIN_SRC c++
+      std::unique_ptr<::gloo::transport::Buffer>
+      Pair::createSendBuffer(int slot, void* ptr, size_t size) {
+        std::unique_lock<std::mutex> lock(m_);
+        GLOO_ENFORCE_EQ(sendCompletionHandlers_.count(slot), 0);
+        auto buffer = new Buffer(this, slot, ptr, size);
+        sendCompletionHandlers_[slot] = buffer;
+        return std::unique_ptr<::gloo::transport::Buffer>(buffer);
+      }
+    #+END_SRC
+
+    将对 =slot= 和 =sendCompletionHandlers_= 的讨论搁置，我们在后面讨论 Pair 中的各个私有变量时再来说明。
+
+    新建了一个 Buffer 实例，第一个参数为调用 =Pair::createSendBuffer()= 这个函数的 Pair 实例对象，其后是 =slot= ，以及 Buffer 的起始地址 =ptr= 和大小 =size= 。在 Buffer 的构造函数中将这块内存进行 RDMA 注册，可以使用 =buffer->mr_= 得到 RDMA 注册内存的元信息，即 =struct ibv_mr *= 。
     
+    #+BEGIN_SRC c++
+      std::unique_ptr<::gloo::transport::Buffer>
+      Pair::createRecvBuffer(int slot, void* ptr, size_t size) {
+        std::unique_lock<std::mutex> lock(m_);
+        GLOO_ENFORCE_EQ(recvCompletionHandlers_.count(slot), 0);
+        auto buffer = new Buffer(this, slot, ptr, size);
+        recvCompletionHandlers_[slot] = buffer;
+        sendMemoryRegion(buffer->mr_, buffer->slot_);
+        return std::unique_ptr<::gloo::transport::Buffer>(buffer);
+      }
+    #+END_SRC
+
+    同样， =recvCompletionHandlers_= 的讨论搁在之后。
+
+    在创建了一个 Buffer 实例之后，相比 =Pair::createSendBuffer()= ， =Pair::createRecvBuffer()= 中会去调用 =Pair::sendMemoryRegion()= ，传入的参数为刚注册的 RDMA 内存的元信息 =buffer->mr_= 和 =buffer->slot_= 。为什么会多一个 =Pair::sendMemoryRegion()= 呢？在 Gloo 的实现中，对 Buffer 内容的传输使用的是 *RDMA WRITE* ，为了进行单边操作（ *one-sided* ），接收端需要主动告诉发送端应该将数据写入到哪一块已注册好的 RDMA 内存中，包括该块内存的 =addr= 、 =length= 以及 =rkey= 。新创建的 RecvBuffer 就是之后用来存放数据的地方，因此需要将这块已注册的 RDMA 内存的元信息告诉给对端。 
+
+    #+BEGIN_SRC c++
+      void Pair::sendMemoryRegion(struct ibv_mr* src, int slot) {
+        auto mr = make_unique<MemoryRegion>(dev_->pd_, src);  // RecvBuffer 进行 RDMA 注册之后的元信息 =src= ，填充 =struct ibv_mr= 
+        struct ibv_sge list = mr->sge();
+        struct ibv_send_wr wr;
+        memset(&wr, 0, sizeof(wr));
+        wr.wr_id = slot;
+        wr.sg_list = &list;
+        wr.num_sge = 1;
+        wr.opcode = IBV_WR_SEND_WITH_IMM;
+        wr.send_flags = IBV_SEND_SIGNALED;  // singnaled? 这个在上面有提到过
+        wr.imm_data = slot;
+
+        // The work request is serialized and sent to the driver so it
+        // doesn't need to be valid after the ibv_post_send call.
+        struct ibv_send_wr* bad_wr = nullptr;
+        int rv = ibv_post_send(qp_, &wr, &bad_wr);
+        if (rv != 0) {
+          signalIoFailure(GLOO_ERROR_MSG("ibv_post_send: ", rv));
+        }
+
+        // Keep memory region around until this send operation completes.
+        // They are posted in FIFO order, but may complete in arbitrary order.
+        // Therefore we store them in a map keyed on the buffer slot.
+        GLOO_ENFORCE_EQ(mappedSendRegions_.count(slot), 0);
+        mappedSendRegions_[slot] = std::move(mr);
+      }
+    #+END_SRC
+
+    RDMA 注册 =struct ibv_mr= 结构体，并使用 RecvBuffer RDMA 注册的元信息 =src= 来进行填充，然后将此元信息发送给对端 ~wr.opcode = IBV_WR_SEND_WITH_IMM~ ，其后的 *RDMA WRITE* 就知道是写入哪一块已注册的 RDMA 内存了。
+
+    这一发送会产生两个事件：
+    1. 对端接收到发送的元数据信息，在对端会产生完成事件 CQE ~wc->opcode = IBV_WC_RECV~ ，这里设置的 ~wr.imm_data = slot~ 会在对端的 =wc->imm_data= 中接收到
+    2. 发送端在发送完成之后会产生完成事件 CQE ~wc->opcode = IBV_WC_SEND~ ，这里设置的 ~wr.wr_id = slot~ 会在本端 =wc->wr_id= 中接收到
+
+    在每个节点上，有一个轮询线程 =loop= 在监听着 Completion Channel 上的 =fd= 何时 =POLLIN= 。当有 CQE 产生并放置于 CQ 上时，就会捕捉到这一通知，在 =ibv_get_cq_event()= 中就能够得到是节点上的哪一个 Pair 对象进行了相关操作，以产生了 CQE 放置于 CQ 上，使用 =Pair::hadleCompletionEvent()= 进行处理。
+
+    在 =Pair::handleCompletionEvent()= 中会 *Re-Arm* 上 CQ 的通知机制，将处理转给 =Pair::pollCompletion()= ，即执行 =ibv_poll_cq()= 从 CQ 上取得 CQEs，然后在 =Pair::handleCompletion()= 中对不同的 CQE 完成事件进行处理。
+
+    *## 对端接受到发送的元数据信息*
+
+    #+BEGIN_SRC c++
+      if (wc->opcode == IBV_WC_RECV) {
+        // Memory region recv completed.
+        //
+        // Only used by the remote side of the pair to pass ibv_mr's.
+        // They are written to in FIFO order, so we can pick up
+        // and use the first MemoryRegion instance in the list of
+        // mapped receive regions.
+        //
+        // The buffer trying to write to this slot might be waiting for
+        // the other side of this pair to send its memory region.
+        // Lock access, and notify anybody waiting afterwards.
+        //
+        // Slot is encoded in immediate data on receive work completion.
+        // It is set in the Pair::sendMemoryRegion function.
+        auto slot = wc->imm_data;
+        GLOO_ENFORCE_EQ(
+            wc->status,
+            IBV_WC_SUCCESS,
+            "Memory region recv for slot ",
+            slot,
+            ": ",
+            ibv_wc_status_str(wc->status));
+
+        // Move ibv_mr from memory region 'inbox' to final slot.
+        const auto& mr = mappedRecvRegions_[recvPosted_ % kMaxBuffers];
+        peerMemoryRegions_[slot] = mr->mr();
+
+        // Notify any buffer waiting for the details of its remote peer.
+        cv_.notify_all();
+
+        // Backfill receive work requests.
+        postReceive();
+      }
+    #+END_SRC
+
+    在对端的接收队列中的 WRs 会指示应该将接收到的元数据信息写入到哪一块已注册的 RDMA 内存中，这个是因为在 Pair 的构造函数中调用 =postReceive()= 所指定的。这里我们会
+
+    *TODO* 这里面有几个地方不是很懂？可能需要把图给画出来，一图胜千言？
+
+    *## 发送端发送元数据信息成功*
+
+    #+BEGIN_SRC c++
+      if (wc->opcode == IBV_WC_SEND) {
+        // Memory region send completed.
+        auto slot = wc->wr_id;
+        GLOO_ENFORCE_EQ(
+            wc->status,
+            IBV_WC_SUCCESS,
+            "Memory region send for slot ",
+            slot,
+            ": ",
+            ibv_wc_status_str(wc->status));
+
+        GLOO_ENFORCE_GT(mappedSendRegions_.size(), 0);
+        GLOO_ENFORCE_EQ(mappedSendRegions_.count(slot), 1);
+        mappedSendRegions_.erase(slot);
+      }
+    #+END_SRC
+    
+    *TODO* =Pair::createRecvBuffer()= 创建的 Buffer 实例，其进行 RDMA 内存注册的元信息确实已经 *RDMA SEND* 到了对端。
+    
+    另外，pair.cc / pair.h 中还有一个重要的函数 =Pair::send()=
+
+    #+BEGIN_SRC c++
+      void Pair::send(Buffer* buffer, size_t offset, size_t length, size_t roffset) {
+        struct ibv_sge list;
+        list.addr = (uint64_t)buffer->ptr_ + offset;
+        list.length = length;
+        list.lkey = buffer->mr_->lkey;
+
+        struct ibv_send_wr wr;
+        memset(&wr, 0, sizeof(wr));
+        wr.wr_id = buffer->slot_;
+        wr.sg_list = &list;
+        wr.num_sge = 1;
+        wr.opcode = IBV_WR_RDMA_WRITE_WITH_IMM;
+        wr.send_flags = IBV_SEND_SIGNALED;
+        wr.imm_data = buffer->slot_;
+
+        const struct ibv_mr* peer = getMemoryRegion(buffer->slot_);
+        GLOO_ENFORCE_NE(peer, (const struct ibv_mr*)nullptr);
+        wr.wr.rdma.remote_addr = (uint64_t)peer->addr + roffset;
+        wr.wr.rdma.rkey = peer->rkey;
+
+        struct ibv_send_wr* bad_wr;
+        auto rv = ibv_post_send(qp_, &wr, &bad_wr);
+        if (rv != 0) {
+          signalIoFailure(GLOO_ERROR_MSG("ibv_post_send: ", rv));
+        }
+      }
+    #+END_SRC
+    
+    终于来到了真实传输 Buffer 数据的实现，使用 *RDMA_WRITE_WITH_IMM* 方式，由于 *RDMA WRITE* 为单边操作（ *one-sided* ），需要知道将数据写入到对端的什么位置，使用 =Pair::getMemoryRegion(buffer->slot_)= 就能够知道要写入对端 RDMA 内存的地址，以及对那块 RDMA 内存有哪些访问权限。
+
+    这一 *RDMA_WRITE_WITH_IMM* 操作会触发两个完成事件：
+
+    1. *RDMA WRITE* 为单边操作，对端 CPU 不会感知到有数据写入到 RDMA 注册的内存中，但这里使用 *RDMA_WRITE_WITH_IMM* ，额外的 =wr.imm_data= 会消费对端接收队列上的一个 WR，这样就会产生一个 CQE，就可以通知对端有 *RDMA WRITE* 操作发生了。在对端会产生完成事件 CQE ~wc->opcode = IBV_WC_RECV_RDMA_WITH_IMM~ ，这里设置 ~wr.imm_data = buffer->slot_~ 会在对端 =wc->imm_data= 中接收到
+    2. 发送端 *RDMA WRITE* 完成之后会产生完成事件 CQE ~wc->opcode = IBV_WC_RDMA_WRITE~ ，这里设置的 ~wr.wr_id = buffer->slot_~ 会在本端 =wc->wr_id= 中接收到
+    
+    *## 对端接收到发送的立即数*
+
+    #+BEGIN_SRC c++
+      if (wc->opcode == IBV_WC_RECV_RDMA_WITH_IMM) {
+        // Incoming RDMA write completed.
+        // Slot is encoded in immediate data on receive work completion.
+        // It is set in the Pair::send function.
+        auto slot = wc->imm_data;
+        GLOO_ENFORCE_EQ(
+            wc->status,
+            IBV_WC_SUCCESS,
+            "Recv for slot ",
+            slot,
+            ": ",
+            ibv_wc_status_str(wc->status));
+
+        GLOO_ENFORCE(recvCompletionHandlers_[slot] != nullptr);
+        recvCompletionHandlers_[slot]->handleCompletion(wc);
+
+        // Backfill receive work requests.
+        postReceive();
+      }
+    #+END_SRC
+    
+    
+
+    *## 发送端 RDMA WRITE 成功*
+    
+    #+BEGIN_SRC c++
+      if (wc->opcode == IBV_WC_RDMA_WRITE) {
+        // Outbound RDMA write completed.
+        // Slot is encoded in wr_id fields on send work request. Unlike
+        // the receive work completions, the immediate data field on send
+        // work requests are not pass to the respective work completion.
+        auto slot = wc->wr_id;
+        GLOO_ENFORCE_EQ(
+            wc->status,
+            IBV_WC_SUCCESS,
+            "Send for slot ",
+            slot,
+            ": ",
+            ibv_wc_status_str(wc->status));
+
+        GLOO_ENFORCE(sendCompletionHandlers_[slot] != nullptr);
+        sendCompletionHandlers_[slot]->handleCompletion(wc);
+      }
+    #+END_SRC
+
+
+    pair.cc / pair.h 中包含很多对其私有变量的操作，这些私有变量表示什么含义，相应的操作是涉及到的是什么意思呢？接下来对这一块知识点进行说明。
+
+    #+BEGIN_SRC c++
+      std::shared_ptr<Device> dev_;
+    #+END_SRC
+
+    
+
+    #+BEGIN_SRC c++
+      // Number of completion events handled by this pair's completion
+      // queue (also see ibv_get_cq_event(3)). This many events need to be
+      // acknowledged prior to destructing the completion queue.
+      // Otherwise, destruction will hang (see ibv_get_cq_event(3)).
+      int completionEventsHandled_;
+    #+END_SRC
+
+    
+
+    #+BEGIN_SRC c++
+      Address self_;
+      Address peer_;
+    #+END_SRC
+
+
+
+    #+BEGIN_SRC c++
+      struct ibv_cq* cq_;
+      struct ibv_qp* qp_;
+    #+END_SRC
+
+    
+
+    #+BEGIN_SRC c++
+      // For us to copy the remote peer's ibv_mr into.
+      std::map<int, struct ibv_mr> peerMemoryRegions_;
+    #+END_SRC
+
+
+
+    #+BEGIN_SRC c++
+      // These fields store memory regions that the remote side of the pair
+      // can send to and that the local side of the pair can send from.
+      //
+      // When registering a receive buffer, the local ibv_mr is sent
+      // to the remote side of the pair, and the corresponding MemoryRegion
+      // instance is kept around in the mappedSendRegions_ list until
+      // the send operation complete.
+      //
+      // To allow the remote side of the pair to send its memory regions,
+      // we keep a fixed number of MemoryRegion instances in
+      // mappedRecvRegions_. These regions are referenced round-robin for
+      // every posted receive work request.
+      //
+      std::map<int, std::unique_ptr<MemoryRegion> > mappedSendRegions_;
+      std::array<std::unique_ptr<MemoryRegion>, kMaxBuffers> mappedRecvRegions_;
+
+      // Keep track of number of request work requests posted and completed.
+      // This is needed to index into the mappedRecvRegions_ array both
+      // when posting the WR and when completing the WR.
+      uint64_t recvPosted_;
+    #+END_SRC
+
+    *需要一张图*
+
+    [[../images/]
+
+
+
+    #+BEGIN_SRC c++
+      // Completions on behalf of buffers need to be forwarded to those buffers.
+      std::map<int, Buffer*> sendCompletionHandlers_;
+      std::map<int, Buffer*> recvCompletionHandlers_;
+    #+END_SRC
+
+    
+
+    
+
+
+
 
 *** *# memory_region.cc / memory_region.h*
 
@@ -389,7 +700,7 @@
                                 enum ibv_access_flags access);
     #+END_SRC
 
-    =ibv_reg_mr()= 返回的是 =struct ibv_mr *= ，即进行 RDMA 注册的那块内存的元信息，包括内存单元的起始地址（ =addr= ）、长度（ =length= ）、以及 =lkey= 和 =rkey=
+    =ibv_reg_mr()= 返回的是 =struct ibv_mr *= ，即进行 RDMA 注册的那块内存的元信息，包括内存单元的起始地址 =addr= 、长度 =length= 、以及 =lkey= 和 =rkey=
 
     #+BEGIN_SRC c
       struct ibv_mr {
@@ -415,6 +726,8 @@
 
 *** *# buffer.cc / buffer.h*
 
-    在 Gloo 的实现中，对 Buffer 内容的传输使用的是 *RDMA WRITE* ，为了进行单边操作，接收端需要主动告诉发送端应该将数据写入到哪一块已注册好的 RDMA 内存中，包括该块内存的 =addr= 、 =length= 以及 =rkey= 。
+    在 Gloo 的实现中，对 Buffer 内容的传输使用的是 *RDMA_WRITE_WITH_IMM* ，为了进行单边操作，接收端需要主动告诉发送端应该将数据写入到哪一块已注册好的 RDMA 内存中，包括该块内存的 =addr= 以及 =rkey= ，这个是由 =Pair::sendMemoryRegion()= 来实现的。
+
+    *TODO* buffer.cc / buffer.h 中关于异步的两个函数 =waitSend()= 和 =waitRecv()= 不是很能理解
 
 
