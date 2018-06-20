@@ -64,7 +64,7 @@
 
     *## Q1* 为什么 =psn= 是使用一个随机数来表示的？
 
-    这个在 Pair.cc 的构造函数中有注释进行了说明，摘录如下：
+    这个在 pair.cc 的构造函数中有注释进行了说明，摘录如下：
 
     #+BEGIN_QUOTE
     The Packet Sequence Number field (PSN) is *random* which makes that the remote end of this pair needs to have the contents of the *full* address struct in order to connect, and vice versa.
@@ -367,10 +367,10 @@
 
     如下图所示，假设有四台 IB Device，即四个节点，每个节点会创建三个 Pair 实例对象，在 Pair 的构造函数中会对私有变量 =Address self_= 进行填充（主要用于 QP 建立连接，QP 的状态 *INIT* -> *RTR* 需要用到对端信息），将这些 =self_= 的值添加到 =allBytes= 中去，并将 =allBytes= 写入 =store= 中， =key= 为当前节点的 =rank= 号。等待所有节点将各自维护的 Pairs 的 =self_= 信息 *set* 入 =store= ，之后再对应取出，这样每一个节点上的 Pair 都知道要与其建立连接的对端信息 =Address peer_= 了，执行 =pairs[i]->connect(addr);= ，将 =pair[i]= 中的 =qp_= 状态从 *INIT* -> *RTR* -> *RTS* ，之后该 QP 就可以执行 RDMA 数据传输操作了。
 
-    [[../images/pair-connection.pdf]] 
+    [[../images/pair-connection.png]] 
 
     但需要注意的是，每一个节点仅会将其上维护的 =pairs= 中包含的 QP 的状态进行转变，每一个 QP 连接的对端都是由各自节点分别执行的，举例来说， ~rank=0~ 上的 =pairs[1]= 中包含的 =qp_= 的状态从 *INIT* -> *RTR* -> *RTS* ，其对端为 ~rank=1~ 上的 =pairs[0]= ，其包含的 =qp_= 状态也是由 *INIT* -> *RTR* -> *RTS* ，分别在各自节点上执行 =Pair::connect()= 。在 *每个节点上* 执行完此 =connectFullMesh()= 函数之后，每个节点上的 Pairs 实例对象所包含的 QPs 均处于 *RTS* 状态。至此，所有节点之间的 RDMA 连接均建立成功，就可以进行后续的 RDMA 操作了。
-     
+    
     pair.cc / pair.h 对外提供的接口主要有：
 
     - =std::unique_ptr<::gloo::transport::Buffer> Pair::createSendBuffer(int slot, void* ptr, size_t size);= 创建发送缓冲区
@@ -405,11 +405,12 @@
 
     同样， =recvCompletionHandlers_= 的讨论搁在之后。
 
-    在创建了一个 Buffer 实例之后，相比 =Pair::createSendBuffer()= ， =Pair::createRecvBuffer()= 中会去调用 =Pair::sendMemoryRegion()= ，传入的参数为刚注册的 RDMA 内存的元信息 =buffer->mr_= 和 =buffer->slot_= 。为什么会多一个 =Pair::sendMemoryRegion()= 呢？在 Gloo 的实现中，对 Buffer 内容的传输使用的是 *RDMA WRITE* ，为了进行单边操作（ *one-sided* ），接收端需要主动告诉发送端应该将数据写入到哪一块已注册好的 RDMA 内存中，包括该块内存的 =addr= 、 =length= 以及 =rkey= 。新创建的 RecvBuffer 就是之后用来存放数据的地方，因此需要将这块已注册的 RDMA 内存的元信息告诉给对端。 
+    在创建了一个 Buffer 实例之后，相比 =Pair::createSendBuffer()= ， =Pair::createRecvBuffer()= 中会去调用 =Pair::sendMemoryRegion()= ，传入的参数为刚注册的 RDMA 内存的元信息 =buffer->mr_= 和 =buffer->slot_= 。为什么会多一个 =Pair::sendMemoryRegion()= 呢？在 Gloo 的实现中，对 Buffer 内容的传输使用的是 *RDMA WRITE* ，为了进行单边操作（ *one-sided* ），接收端需要主动告诉发送端应该将数据写入到哪一块已注册好的 RDMA 内存中，包括该块内存的 =addr= 和 =rkey= 。新创建的 RecvBuffer 就是之后用来存放数据的地方，因此需要将这块已注册的 RDMA 内存的元信息告诉给对端。 
 
     #+BEGIN_SRC c++
       void Pair::sendMemoryRegion(struct ibv_mr* src, int slot) {
-        auto mr = make_unique<MemoryRegion>(dev_->pd_, src);  // RecvBuffer 进行 RDMA 注册之后的元信息 =src= ，填充 =struct ibv_mr= 
+        // RecvBuffer 进行 RDMA 注册之后的元信息 src，填充 MemoryRegion 中的 struct ibv_mr
+        auto mr = make_unique<MemoryRegion>(dev_->pd_, src); 
         struct ibv_sge list = mr->sge();
         struct ibv_send_wr wr;
         memset(&wr, 0, sizeof(wr));
@@ -484,7 +485,7 @@
       }
     #+END_SRC
 
-    在对端的接收队列中的 WRs 会指示应该将接收到的元数据信息写入到哪一块已注册的 RDMA 内存中，这个是因为在 Pair 的构造函数中调用 =postReceive()= 所指定的。这里我们会
+    在对端的接收队列中的 WRs 会指示应该将接收到的元数据信息写入到哪一块已注册的 RDMA 内存中，这个是在 Pair 的构造函数中调用 =postReceive()= 所指定的。
 
     *TODO* 这里面有几个地方不是很懂？可能需要把图给画出来，一图胜千言？
 
@@ -508,7 +509,7 @@
       }
     #+END_SRC
     
-    *TODO* =Pair::createRecvBuffer()= 创建的 Buffer 实例，其进行 RDMA 内存注册的元信息确实已经 *RDMA SEND* 到了对端。
+    =Pair::createRecvBuffer()= 创建的 Buffer 实例，其进行 RDMA 内存注册的元信息确实已经 *RDMA SEND* 到了对端。
     
     另外，pair.cc / pair.h 中还有一个重要的函数 =Pair::send()=
 
@@ -572,7 +573,7 @@
       }
     #+END_SRC
     
-    
+    *TODO*
 
     *## 发送端 RDMA WRITE 成功*
     
@@ -595,15 +596,16 @@
         sendCompletionHandlers_[slot]->handleCompletion(wc);
       }
     #+END_SRC
-
-
+    
+    *TODO*
+    
     pair.cc / pair.h 中包含很多对其私有变量的操作，这些私有变量表示什么含义，相应的操作是涉及到的是什么意思呢？接下来对这一块知识点进行说明。
 
     #+BEGIN_SRC c++
       std::shared_ptr<Device> dev_;
     #+END_SRC
-
     
+    在创建 Pair 实例对象时，将节点的设备对象 =Device= 传进来，就可以通过 =dev_= 访问到 =ibv_context *context_= / =ibv_pd *pd_= / =ibv_comp_channel *comp_channel_= 等在同一个节点上各个 Pairs 所共享的资源了。
 
     #+BEGIN_SRC c++
       // Number of completion events handled by this pair's completion
@@ -613,30 +615,28 @@
       int completionEventsHandled_;
     #+END_SRC
 
-    
+    这个变量的作用在上面已经说明过了。当有 CQE 产生并放置在 CQ 上时（由于 CQ 已经 *Arm* 上了通知机制），CQ 会产生一个完成事件通知与其绑定的 Completion Channel，这些完成事件需要被 Ack，使用 =completionEventsHandled_= 来计数，记录 CQ 产生的完成事件的个数，之后传递给 =ibv_ack_cq_events(cq_, completionEventsHandled_)= 统一进行 Ack。  
 
     #+BEGIN_SRC c++
       Address self_;
       Address peer_;
     #+END_SRC
 
-
+    =Address= 中保存了建立 QP 连接的信息 =addr_= ， =self_= 在 Pair 的构造函数中进行填充，然后每个设备上所有的 Pairs 都会将自己所持有的 =self_= 写入到一个 =store= 中，当所有节点都写入之后，就可以拿到当前设备上某一特定 Pair 的对端地址了 =peer_= 。之后就可以调用 =Pair::connect()= 建立 QP 连接了。 
 
     #+BEGIN_SRC c++
       struct ibv_cq* cq_;
       struct ibv_qp* qp_;
     #+END_SRC
 
-    
+    在 Gloo 的实现中，每一个 Pair 实例对象都有自己的 CQ 和 QP。
+
+    根据 =gloo/allreduce_ring.h= 对底层通信的使用，来对下面几个变量进行深入理解。
 
     #+BEGIN_SRC c++
       // For us to copy the remote peer's ibv_mr into.
       std::map<int, struct ibv_mr> peerMemoryRegions_;
-    #+END_SRC
-
-
-
-    #+BEGIN_SRC c++
+      
       // These fields store memory regions that the remote side of the pair
       // can send to and that the local side of the pair can send from.
       //
@@ -657,25 +657,67 @@
       // This is needed to index into the mappedRecvRegions_ array both
       // when posting the WR and when completing the WR.
       uint64_t recvPosted_;
-    #+END_SRC
-
-    *需要一张图*
-
-    [[../images/]
-
-
-
-    #+BEGIN_SRC c++
+      
       // Completions on behalf of buffers need to be forwarded to those buffers.
       std::map<int, Buffer*> sendCompletionHandlers_;
       std::map<int, Buffer*> recvCompletionHandlers_;
     #+END_SRC
 
-    
+    还是接上面的那个例子，有四台 IB Device，即四个节点，现在每个节点上的三个 Pair 对象均已 RDA 连接成功。在 =gloo/allreduce_ring.h= 的实现中，并不会使用全部的这些连接，而是选用，如下图所示。
 
-    
+    [[../images/allreduce-ring.png]] 
 
+    #+BEGIN_SRC c++
+      AllreduceRing(
+          const std::shared_ptr<Context>& context,
+          const std::vector<T*>& ptrs,
+          const int count,
+          const ReductionFunction<T>* fn = ReductionFunction<T>::sum)
+          : Algorithm(context),
+            ptrs_(ptrs),
+            count_(count),
+            bytes_(count_ * sizeof(T)),
+            fn_(fn) {
+        inbox_ = static_cast<T*>(malloc(bytes_));
+        outbox_ = static_cast<T*>(malloc(bytes_));
 
+        if (this->contextSize_ == 1) {
+          return;
+        }
+
+        auto& leftPair = this->getLeftPair();
+        auto& rightPair = this->getRightPair();
+        auto slot = this->context_->nextSlot();
+
+        // Buffer to send to (rank+1).
+        sendDataBuf_ = rightPair->createSendBuffer(slot, outbox_, bytes_);
+
+        // Buffer that (rank-1) writes to.
+        recvDataBuf_ = leftPair->createRecvBuffer(slot, inbox_, bytes_);
+
+        // Dummy buffers for localized barrier.
+        // Before sending to the right, we only need to know that the node
+        // on the right is done using the inbox that's about to be written
+        // into. No need for a global barrier.
+        auto notificationSlot = this->context_->nextSlot();
+        sendNotificationBuf_ =
+            leftPair->createSendBuffer(notificationSlot, &dummy_, sizeof(dummy_));
+        recvNotificationBuf_ =
+            rightPair->createRecvBuffer(notificationSlot, &dummy_, sizeof(dummy_));
+            }
+    #+END_SRC
+
+    这里只讨论 =sendDataBuf_= 和 =recvDataBuf_= ， =sendNotificationBuf_= 和 =recvNotificationBuf_= 属于代码的实现细节，暂不讨论。
+
+    对于 =sendDataBuf_= 和 =recvDataBuf_= ，在创建 Buffer 对象的时候传入的 =slot= 是相同的（在代码的实现中都为 ~slot = 0~ ）。在 =Pair::createSendBuffer()= 中会对这块 =sendDataBuf_= 内存进行 RDMA 注册，并在 =rightPair= 的 =sendCompletionHandlers_= 中建立 =slot= 到新创建的 =sendDataBuf_= 对象的映射。同样的，在 =Pair::createRecvBuffer()= 中会进行 RDMA 内存注册，在 =leftPair= 的 =recvCompletionHandlers_= 中建立 =slot= 到新建立的 =recvDataBuf_= 对象的映射；另外还会执行 =Pair::sendMemoryRegion(recvDataBuf_->mr_, recvDataBuf_->slot_)= ，将刚注册好的接收缓存区的 RDMA 元数据信息给发送出去。
+
+    在 =Pair::sendMemoryRegion()= 执行 =ibv_post_send()= 发送 RDMA 元数据之后，会将发送端用于保存元数据的 =struct ibv_mr= 保存在 =mappedSendRegions_= 中，在之后发送端确定已发送成功之后（即 ~wc->opcode == IBV_WC_SEND~ ），在从映射表中移除。在对端接受到此元数据之后（即 ~wc->opcode == IBV_WC_RECV~ ），由于接收队列中的 WRs 会按 FIFO 的顺序进行消费并写入接收到的数据，所以根据 =mappedRecvRegions_[recvPosted_ % kMaxBuffers]= 就可以得到元信息写入的 MR 了；使用接收到的额外的立即数作为 key，保存该 MR 在 =peerMemoryRegions_= 映射表中。之后 =Pair::getMemoryRegion(slot)= 就可以直接取得对端的接受缓冲区的元数据信息了，就能够执行 *RDMA WRITE* 了。
+
+    这里就涉及到对 =recvPosted_= 的递增了，在 =Pair::postReceive()= 中，以及对 =Pair::postReceive()= 进行调用的 =Pair::handleCompletion()= 中使用。 *TODO* 这里是我很不理解的。
+
+    =sendCompletionHandlers_= 和 =recvCompletionHandlers_= 是为了之后对 Buffer 的同步操作，调用 =Buffer::waitSend()= 和 =Buffer::waitRecv()= 。 *TODO* 这是我现在的理解，有待完善。
+
+    *TODO* 另外还需要补充对 =slot= 的讨论。
 
 
 *** *# memory_region.cc / memory_region.h*
