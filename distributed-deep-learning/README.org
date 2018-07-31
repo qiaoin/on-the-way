@@ -1,0 +1,46 @@
+#+TITLE: 论文阅读
+#+AUTHOR: qiaoin
+#+EMAIL: qiao.liubing@gmail.com
+#+OPTIONS: toc:3 num:nil
+#+STARTUP: showall
+#+DATE: 2018-07-03 13:59:49 [start]
+
+#+BEGIN_QUOTE
+
+#+END_QUOTE
+
+主要参考资料：
+
+- More Effective Distributed ML via a Stale Synchronous Parallel Parameter Server
+- Scaling Distributed Machine Learning with the Paremeter Server
+- TensorFlow: A system for larger-scale machine learning
+-
+- [[https://zhuanlan.zhihu.com/p/29968773][大规模机器学习框架的四重境界]]
+-
+
+** 数据并行 v.s. 模型并行（Data Parallelism v.s. Model Parallelism）
+
+数据并行和模型并行是理解大规模机器学习框架的基础概念。这两个概念在 [[https://www.zhihu.com/question/31999064][这里]] 李沐大神给出了非常直观且经典的解释：
+
+#+BEGIN_QUOTE
+举个栗子。假设我准备盖下面这座双子楼，我有两个选择：一个是把人分成两组，每组建一栋楼然后装修好，最后把两个连起来 。二是仍然分两组，第一组先把楼盖好，第二组负责装修。第一个方案的好处是并行度高。但要求每个组又要懂建房又要懂装修。第二方案要求低点，一个组会建，一个组会装修就行了。坏处是，一个组在干活的时候另外一个组可能在赋闲。
+
+换成"data/model parallelism", 这里一个组是一个 cpu 或者一个 gpu。第一个方案是 data parallelism，第二方案是 model parallelism。技能要求可以简单看成是对内存的需求。当模型很大不能 fit 进单机内存或者单 GPU 内存（这个可能性高多了）的时候，我们一般用 model parallelism，不然用 data parallelism，因为通常快一些。但某些情况下，model parallelism 的并行程度也没那么低，例如 deep neural network。换回到那个栗子，每一层楼就是 neural network 的一层。这时候我可以流水盖楼：第一天：一组盖第一层第二天：一组盖第二层，二组装修第一层第三天：一组盖第三层，二组装修第二层...或者只要楼高，可以基本接近 2 倍加速。
+
+作者：李沐
+链接：https://www.zhihu.com/question/31999064/answer/106693383
+#+END_QUOTE
+
+数据并行理解起来比较简单，当样本比较多的时候，为了使用所有样本来训练模型，我们不妨把数据分布到不同的机器上，然后每台机器都来对模型参数进行迭代，如下图所示
+
+图片取材于 TensorFlow 的 paper[4]，图中 ABC 代表三台不同的机器，上面存储着不同的样本，模型 P 在各台机器上计算对应的增量，然后在参数存储的机器上进行汇总和更新，这就是数据并行。数据并行概念简单，而且不依赖于具体的模型，因此数据并行机制可以作为框架的一种基础功能，对所有算法都生效。
+
+与之不同的是，模型并行因为参数间存在依赖关系（其实数据并行参数更新也可能会依赖所有的参数，但区别在于往往是依赖于上一个迭代的全量参数。而模型并行往往是同一个迭代内的参数之间有强依赖关系，比如 DNN 网络的不同层之间的参数依照 BP 算法形成的先后依赖），无法类比数据并行这样直接将模型参数分片而破坏其依赖关系，所以模型并行不仅要对模型分片，同时需要调度器来控制参数间的依赖关系。而每个模型的依赖关系往往并不同，所以模型并行的调度器因模型而异，较难做到完全通用。
+
+关于这个问题，CMU 的 Erix Xing 在[5]中有所介绍。
+
+模型并行的问题定义可以参考姐夫的[6]，这篇 paper 也是 TensorFlow 的前身相关的总结，其中图
+
+解释了模型并行的物理图景，当一个超大神经网络无法存储在一台机器上时，我们可以切割网络存到不同的机器上，但是为了保持不同参数分片之间的依赖，如图中粗黑线的部分，则需要在不同的机器之间进行 concurrent 控制；同一个机器内部的参数依赖，即途中细黑线部分在机器内即可完成控制。
+
+
